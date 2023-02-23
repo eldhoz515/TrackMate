@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity() {
     private fun authenticate() {
         print("authenticate()")
         val biometricPrompt = BiometricPrompt.Builder(this)
-            .setTitle("Verify you aren't a bit*h")
+            .setTitle("Verify you aren't a stupid bit*h")
             .setSubtitle("")
             .setDescription("Tell me you really are you without telling me you really are you !")
             .setNegativeButton(
