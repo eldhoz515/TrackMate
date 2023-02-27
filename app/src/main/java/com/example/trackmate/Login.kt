@@ -4,10 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import org.json.JSONObject
 import java.io.File
 
@@ -44,125 +41,114 @@ class Login : AppCompatActivity() {
         Utils.print("onRequest()")
         if (!validation())
             return
-        msg.visibility=View.INVISIBLE
-        val json=JSONObject()
-        json.put("username",username.text.toString().lowercase())
-        json.put("password",password.text.toString())
-        if(firstTime){
-            json.put("name",name.text.toString())
-            if(profile=="student"){
-                json.put("class",selectedClass)
-                json.put("teacher",selectedTeacher)
+        msg.visibility = View.INVISIBLE
+        val json = JSONObject()
+        json.put("username", username.text.toString().lowercase())
+        json.put("password", password.text.toString())
+        if (firstTime) {
+            json.put("name", name.text.toString())
+            if (profile == "student") {
+                json.put("class", selectedClass)
+                json.put("teacher", selectedTeacher)
             }
         }
 
         when (profile) {
             "admin" -> {
-                adminRequest(firstTime,json)
+                adminRequest(firstTime, json)
             }
             "student" -> {
-                studentRequest(firstTime,json)
+                studentRequest(firstTime, json)
             }
             "teacher" -> {
-                teacherRequest(firstTime,json)
+                teacherRequest(firstTime, json)
             }
         }
     }
 
-    private fun adminRequest(firstTime: Boolean,data: JSONObject) {
+    private fun adminRequest(firstTime: Boolean, data: JSONObject) {
         Utils.print("adminRequest()")
-        val callback=object :HttpCallback{
+        val callback = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
-                if(result==null || result.statusCode!=200){
-                    msg.text="Invalid credentials"
-                }
-                else{
-                    writeFile("creds.json",data)
-                    startActivity(Intent(context,Admin::class.java))
+                if (result == null || result.statusCode != 200) {
+                    msg.text = "Invalid credentials"
+                } else {
+                    writeFile("creds.json", data)
+                    startActivity(Intent(context, Admin::class.java))
                     finish()
                 }
             }
         }
-        Server("$root/admin/auth","POST",data.toString(),callback).execute()
+        Server("$root/admin/auth", "POST", data.toString(), callback).execute()
     }
 
-    private fun studentRequest(firstTime: Boolean,data: JSONObject) {
+    private fun studentRequest(firstTime: Boolean, data: JSONObject) {
         Utils.print("studentRequest()")
-        if(firstTime){
-            val callback=object :HttpCallback{
+        if (firstTime) {
+            val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
-                    if(result!=null && result.statusCode==200){
-                        writeFile("creds.json",data)
-                        startActivity(Intent(context,Home::class.java))
+                    if (result != null && result.statusCode == 200) {
+                        writeFile("creds.json", data)
+                        startActivity(Intent(context, Home::class.java))
                         finish()
-                    }
-                    else if(result!=null && result.statusCode==401){
-                        msg.text="Account already exists"
-                    }
-                    else{
-                        msg.text="Invalid credentials"
+                    } else if (result != null && result.statusCode == 401) {
+                        msg.text = "Account already exists"
+                    } else {
+                        msg.text = "Invalid credentials"
                     }
                 }
             }
-            Server("$root/student/new","POST",data.toString(),callback).execute()
-        }
-        else{
-            val callback=object :HttpCallback{
+            Server("$root/student/new", "POST", data.toString(), callback).execute()
+        } else {
+            val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
-                    if(result!=null && result.statusCode==200){
-                        writeFile("creds.json",data)
-                        startActivity(Intent(context,Student::class.java))
+                    if (result != null && result.statusCode == 200) {
+                        writeFile("creds.json", data)
+                        startActivity(Intent(context, Student::class.java))
                         finish()
-                    }
-                    else if(result!=null && result.statusCode==401){
-                        msg.text="Invalid credentials"
-                    }
-                    else{
-                        msg.text="No matching account accepted in class"
+                    } else if (result != null && result.statusCode == 401) {
+                        msg.text = "Invalid credentials"
+                    } else {
+                        msg.text = "No matching account accepted in class"
                     }
                 }
             }
-            Server("$root/student/auth","POST",data.toString(),callback).execute()
+            Server("$root/student/auth", "POST", data.toString(), callback).execute()
         }
     }
 
-    private fun teacherRequest(firstTime: Boolean,data: JSONObject) {
+    private fun teacherRequest(firstTime: Boolean, data: JSONObject) {
         Utils.print("teacherRequest()")
-        if(firstTime){
-            val callback=object :HttpCallback{
+        if (firstTime) {
+            val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
-                    if(result!=null && result.statusCode==200){
-                        writeFile("creds.json",data)
-                        startActivity(Intent(context,Home::class.java))
+                    if (result != null && result.statusCode == 200) {
+                        writeFile("creds.json", data)
+                        startActivity(Intent(context, Home::class.java))
                         finish()
-                    }
-                    else if(result!=null && result.statusCode==401){
-                        msg.text="Account already exists"
-                    }
-                    else{
-                        msg.text="Invalid credentials"
+                    } else if (result != null && result.statusCode == 401) {
+                        msg.text = "Account already exists"
+                    } else {
+                        msg.text = "Invalid credentials"
                     }
                 }
             }
-            Server("$root/teacher/new","POST",data.toString(),callback).execute()
-        }
-        else{
-            val callback=object :HttpCallback{
+            Server("$root/teacher/new", "POST", data.toString(), callback).execute()
+        } else {
+            val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
-                    if(result!=null && result.statusCode==200){
-                        writeFile("creds.json",data)
-                        startActivity(Intent(context,Teacher::class.java))
+                    if (result != null && result.statusCode == 200) {
+                        writeFile("creds.json", data)
+                        startActivity(Intent(context, Teacher::class.java))
                         finish()
-                    }
-                    else if(result!=null && result.statusCode==401){
-                        msg.text="Invalid credentials"
-                    }
-                    else{
-                        msg.text="No matching account accepted by Admin"
+                    } else if (result != null && result.statusCode == 401) {
+                        msg.text = "Invalid credentials"
+                    } else {
+                        msg.text = "No matching account accepted by Admin"
                     }
                 }
             }
-            Server("$root/teacher/auth","POST",data.toString(),callback).execute()
+            Server("$root/teacher/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -194,6 +180,28 @@ class Login : AppCompatActivity() {
 
     private fun setUI() {
         setViews()
+        getLists()
+        listOf(teachersList, classesList).forEach { spinner ->
+            run {
+                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        if (spinner == teachersList)
+                            selectedTeacher = parent.getItemAtPosition(position).toString()
+                        else
+                            selectedClass = parent.getItemAtPosition(position).toString()
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        // Another interface callback
+                    }
+                }
+            }
+        }
         listOf(admin, teacher, student).forEach { button ->
             run {
                 button.setOnClickListener {
@@ -213,6 +221,43 @@ class Login : AppCompatActivity() {
         request.setOnClickListener {
             onRequest()
         }
+    }
+
+    private fun getLists() {
+        val callback = object : HttpCallback {
+            override fun onComplete(result: HttpResult?) {
+                if (result != null && result.data != null && result.statusCode == 200) {
+                    val spinnerItems = mutableListOf<String>()
+                    val json = JSONObject(result.data)
+                    for (teacher in json.keys()) {
+                        val name = json.getJSONObject(teacher).get("name").toString()
+                        spinnerItems.add(name)
+                    }
+                    val adapter =
+                        ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerItems)
+                    teachersList.adapter = adapter
+                }
+            }
+        }
+        Server("$root/student/teacher/list", "GET", null, callback)
+
+        val callback1 = object : HttpCallback {
+            override fun onComplete(result: HttpResult?) {
+                if (result != null && result.data != null && result.statusCode == 200) {
+                    val spinnerItems = mutableListOf<String>()
+                    val json = JSONObject(result.data)
+                    val classes = json.getJSONArray("classes")
+                    for (i in 0 until classes.length()) {
+                        val className = classes.getString(i)
+                        spinnerItems.add(className)
+                    }
+                    val adapter =
+                        ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerItems)
+                    classesList.adapter = adapter
+                }
+            }
+        }
+        Server("$root/student/class/list", "GET", null, callback1)
     }
 
     private fun setViews() {

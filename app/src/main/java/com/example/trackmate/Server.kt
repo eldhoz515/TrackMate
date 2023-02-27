@@ -10,7 +10,7 @@ import java.net.URL
 
 class HttpResult(
     val statusCode: Int,
-    val data: Any
+    val data: String?
 )
 
 interface HttpCallback {
@@ -59,12 +59,7 @@ class Server(
             bufferedReader.close()
             inputStream.close()
             connection.disconnect()
-            val data: Any = try {
-                JSONObject(response.toString())
-            } catch (e: Exception) {
-                response.toString()
-            }
-            return HttpResult(statusCode, data)
+            return HttpResult(statusCode, response.toString())
         } catch (e: Exception) {
             e.printStackTrace()
         }
