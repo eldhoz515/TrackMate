@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
 
+private var teacherRequests = mutableListOf<JSONObject>()
+private val root = "http://192.168.160.176:8888"
+
 class Admin_teacherRequests : DialogFragment() {
-    private val root = "http://192.168.1.5:8888"
-    private var teacherRequests = mutableListOf<String>()
     private lateinit var fragmentView: View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,48 +29,50 @@ class Admin_teacherRequests : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Utils.print("Launching teacher requests")
-//        getRequests()
-        setUI()
+        getRequests()
     }
 
-//    private fun getRequests() {
-//        val callback = object : HttpCallback {
-//            override fun onComplete(result: HttpResult?) {
-//                if (result?.data != null && result.statusCode == 200) {
-//                    val json = JSONObject(result.data)
-//                    val requests = json.getJSONArray("requests")
-//                    for (i in 0 until requests.length()) {
-//                        teacherRequests.add(requests.getJSONObject(i))
-//                    }
-//                    if (teacherRequests.size > 0) {
-//                        setUI()
-//                    } else {
-//                        Utils.print("No teacher requests")
-//                    }
-//                }
-//            }
-//        }
-//        Server("$root/admin/requests", "GET", null, callback).execute()
-//    }
+    private fun getRequests() {
+        Utils.print("getRequests()")
+        val callback = object : HttpCallback {
+            override fun onComplete(result: HttpResult?) {
+                if (result?.data != null && result.statusCode == 200) {
+                    val json = JSONObject(result.data)
+                    val requests = json.getJSONArray("requests")
+                    for (i in 0 until requests.length()) {
+                        teacherRequests.add(requests.getJSONObject(i))
+                    }
+                    if (teacherRequests.size > 0) {
+                        Utils.print(teacherRequests)
+                        setUI()
+                    } else {
+                        Utils.print("No teacher requests")
+                    }
+                }
+            }
+        }
+        Server("$root/admin/requests", "GET", null, callback).execute()
+    }
 
     private fun setUI() {
+        Utils.print("setUI()")
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        teacherRequests = mutableListOf("Arun", "Devananth", "Fleming")
         val adapter = ItemAdapter(teacherRequests)
         recyclerView.adapter = adapter
+
     }
 }
 
-class ItemAdapter(private val items: MutableList<String>) :
+class ItemAdapter(private val items: MutableList<JSONObject>) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val text1: TextView = view.findViewById(R.id.t_req_username)
-        val text2: TextView = view.findViewById(R.id.t_req_name)
-        val button1: Button = view.findViewById(R.id.t_req_accept)
-        val button2: Button = view.findViewById(R.id.t_req_deny)
+        val username: TextView = view.findViewById(R.id.t_req_username)
+        val name: TextView = view.findViewById(R.id.t_req_name)
+        val accept: Button = view.findViewById(R.id.t_req_accept)
+        val deny: Button = view.findViewById(R.id.t_req_deny)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -79,11 +83,38 @@ class ItemAdapter(private val items: MutableList<String>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.text1.text = item
-        holder.text2.text = item
-        holder.button1.setOnClickListener {
+        holder.username.text = item.get("username").toString()
+        holder.name.text = item.get("name").toString()
+        holder.accept.setOnClickListener {
+            Utils.print("accepted")
+            val pos = holder.adapterPosition
+            val json = JSONObject()
+            json.put("teacher", teacherRequests[pos])
+            json.put("accept", 1)
+            val callback = object : HttpCallback {
+                override fun onComplete(result: HttpResult?) {
+                    if (result != null && result.statusCode == 200)
+                        Utils.print("responded successfully")
+                }
+            }
+            Server("$root/admin/respond", "POST", json.toString(), callback).execute()
+            teacherRequests.removeAt(pos)
+            notifyItemRemoved(pos)
         }
-        holder.button2.setOnClickListener {
+        holder.deny.setOnClickListener {
+            Utils.print("denied")
+            val pos = holder.adapterPosition
+            val json = JSONObject()
+            json.put("teacher", teacherRequests[pos])
+            val callback = object : HttpCallback {
+                override fun onComplete(result: HttpResult?) {
+                    if (result != null && result.statusCode == 200)
+                        Utils.print("responded successfully")
+                }
+            }
+            Server("$root/admin/respond", "POST", json.toString(), callback).execute()
+            teacherRequests.removeAt(pos)
+            notifyItemRemoved(pos)
         }
     }
 

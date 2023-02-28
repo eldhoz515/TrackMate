@@ -67,6 +67,8 @@ class Server(
     }
 
     override fun onPostExecute(result: HttpResult?) {
+        if(result==null)
+            Utils.print("connection error")
         super.onPostExecute(result)
         callback.onComplete(result)
     }
