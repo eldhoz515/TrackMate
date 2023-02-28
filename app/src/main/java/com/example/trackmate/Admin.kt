@@ -8,11 +8,8 @@ class Admin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin)
         Utils.print("launching Admin")
-        val fragment=Admin_teacherRequests()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.teacher_requests, fragment)
-            .addToBackStack(null)
-            .commit()
+        val teacherReqFragment=Admin_teacherRequests()
+        teacherReqFragment.show(supportFragmentManager, "Admin_teacherRequests")
     }
 
 }
