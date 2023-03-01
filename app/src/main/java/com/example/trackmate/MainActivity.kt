@@ -6,8 +6,6 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.*
 import android.content.pm.PackageManager
-import android.hardware.biometrics.BiometricManager
-import android.hardware.biometrics.BiometricManager.Authenticators
 import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 //        checkPermissionsWrapper()
-        val button = findViewById<Button>(R.id.button)
+        val button = findViewById<Button>(R.id.s_req_notifier)
         button.setOnClickListener { checkPermissionsWrapper() }
     }
 
