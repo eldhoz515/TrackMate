@@ -1,6 +1,5 @@
 package com.example.trackmate
 
-import android.app.PendingIntent.getActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +7,25 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
-import java.io.File
 
 private var studentRequests = mutableListOf<JSONObject>()
+private lateinit var teacherName: String
 
 class Teacher_studentRequests : DialogFragment() {
     private lateinit var fragmentView: View
+
+    companion object {
+        fun newInstance(data: String): Teacher_studentRequests {
+            val dialogFragment = Teacher_studentRequests()
+            val args = Bundle()
+            args.putString("username", data)
+            dialogFragment.arguments = args
+            return dialogFragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +38,8 @@ class Teacher_studentRequests : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Utils.print("Launching student requests")
+        teacherName = arguments?.getString("username").toString()
+        Utils.print(teacherName)
         getRequests()
     }
 
@@ -48,39 +58,40 @@ class Teacher_studentRequests : DialogFragment() {
                         setUI()
                     } else {
                         Utils.print("No student requests")
-                        val msg=fragmentView.findViewById<TextView>(R.id.s_no_req)
-                        msg.visibility=View.VISIBLE
+                        val msg = fragmentView.findViewById<TextView>(R.id.s_no_req)
+                        msg.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        Server("/teacher/requests", "POST", null, callback).execute()
+        val data = JSONObject()
+        data.put("username", teacherName)
+        Server("/teacher/requests", "POST", data.toString(), callback).execute()
     }
 
     private fun setUI() {
         Utils.print("setUI()")
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_req_list)
+        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = AdapterstudentRequests(studentRequests)
+        val adapter = AdapterStudentRequests(studentRequests)
         recyclerView.adapter = adapter
-
     }
 }
 
-class AdapterstudentRequests(private val items: MutableList<JSONObject>) :
-    RecyclerView.Adapter<AdapterstudentRequests.ViewHolder>() {
+class AdapterStudentRequests(private val items: MutableList<JSONObject>) :
+    RecyclerView.Adapter<AdapterStudentRequests.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val username: TextView = view.findViewById(R.id.t_req_username)
-        val name: TextView = view.findViewById(R.id.t_req_name)
-        val accept: Button = view.findViewById(R.id.t_req_accept)
-        val deny: Button = view.findViewById(R.id.t_req_deny)
+        val username: TextView = view.findViewById(R.id.s_req_username)
+        val name: TextView = view.findViewById(R.id.s_req_name)
+        val accept: Button = view.findViewById(R.id.s_accept)
+        val deny: Button = view.findViewById(R.id.s_reject)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_t_req, parent, false)
+            .inflate(R.layout.list_item_s_req, parent, false)
         return ViewHolder(view)
     }
 
@@ -92,7 +103,8 @@ class AdapterstudentRequests(private val items: MutableList<JSONObject>) :
             Utils.print("accepted")
             val pos = holder.adapterPosition
             val json = JSONObject()
-            json.put("teacher", studentRequests[pos])
+            json.put("username", teacherName)
+            json.put("student", studentRequests[pos])
             json.put("accept", 1)
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
@@ -100,7 +112,7 @@ class AdapterstudentRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/admin/respond", "POST", json.toString(), callback).execute()
+            Server("/teacher/respond", "POST", json.toString(), callback).execute()
             studentRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -108,14 +120,15 @@ class AdapterstudentRequests(private val items: MutableList<JSONObject>) :
             Utils.print("denied")
             val pos = holder.adapterPosition
             val json = JSONObject()
-            json.put("teacher", studentRequests[pos])
+            json.put("username", teacherName)
+            json.put("student", studentRequests[pos])
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
                     if (result != null && result.statusCode == 200)
                         Utils.print("responded successfully")
                 }
             }
-            Server("/admin/respond", "POST", json.toString(), callback).execute()
+            Server("/teacher/respond", "POST", json.toString(), callback).execute()
             studentRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }

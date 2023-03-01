@@ -10,7 +10,7 @@ class Admin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin)
         Utils.print("launching Admin")
-        addClass()
+        manageTimings()
     }
 
     private fun init(){
@@ -18,6 +18,13 @@ class Admin : AppCompatActivity() {
         manageTeachers()
         manageClasses()
         manageStudents()
+        addClass()
+    }
+
+    private fun manageTimings(){
+        Utils.print("manageTimings()")
+        val studentListFragment = Admin_timings()
+        studentListFragment.show(supportFragmentManager, "Admin_timings")
     }
 
     private fun addClass(){
