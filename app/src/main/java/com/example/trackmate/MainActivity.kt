@@ -20,7 +20,7 @@
 //class MainActivity : AppCompatActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_trash)
 ////        checkPermissionsWrapper()
 //        val button = findViewById<Button>(R.id.s_req_notifier)
 //        button.setOnClickListener { checkPermissionsWrapper() }
