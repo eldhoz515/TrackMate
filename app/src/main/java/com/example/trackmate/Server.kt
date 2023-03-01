@@ -26,7 +26,9 @@ class Server(
 
     override fun doInBackground(vararg params: Void?): HttpResult? {
         try {
-            val urlObj = URL(url)
+            val root = "http://192.168.1.5:8888"
+//            Utils.print("$root$url")
+            val urlObj = URL("$root$url")
             val connection = urlObj.openConnection() as HttpURLConnection
             connection.requestMethod = method
             connection.connectTimeout = 10000 // optional
@@ -43,6 +45,7 @@ class Server(
             }
 
             val statusCode = connection.responseCode
+            Utils.print(statusCode)
             val inputStream = if (statusCode == HttpURLConnection.HTTP_OK) {
                 connection.inputStream
             } else {
@@ -67,7 +70,7 @@ class Server(
     }
 
     override fun onPostExecute(result: HttpResult?) {
-        if(result==null)
+        if (result == null)
             Utils.print("connection error")
         super.onPostExecute(result)
         callback.onComplete(result)

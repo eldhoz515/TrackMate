@@ -4,29 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A37474">
+    android:background="#9B57B3">
 
     <LinearLayout
-        android:layout_width="285dp"
-        android:layout_height="360dp"
-        android:background="#C83C3C"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="241dp"
+        android:layout_height="297dp"
+        android:background="#BFB367"
+        tools:layout_editor_absoluteX="76dp"
+        tools:layout_editor_absoluteY="244dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/t_req_list"
-            android:layout_width="170dp"
-            android:layout_height="230dp" />
+            android:id="@+id/t_list_list"
+            android:layout_width="168dp"
+            android:layout_height="291dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
-            android:id="@+id/tRegMsg"
+            android:id="@+id/t_list_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No new requests"
+            android:text="No teachers found"
             android:visibility="gone" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

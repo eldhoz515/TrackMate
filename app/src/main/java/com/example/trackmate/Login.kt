@@ -9,7 +9,6 @@ import org.json.JSONObject
 import java.io.File
 
 class Login : AppCompatActivity() {
-    private val root = "http://192.168.1.5:8888"
     private val context = this
     private var firstTime = true
     private var profile = "student"
@@ -79,7 +78,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server("$root/admin/auth", "POST", data.toString(), callback).execute()
+        Server("/admin/auth", "POST", data.toString(), callback).execute()
     }
 
     private fun studentRequest(firstTime: Boolean, data: JSONObject) {
@@ -98,7 +97,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("$root/student/new", "POST", data.toString(), callback).execute()
+            Server("/student/new", "POST", data.toString(), callback).execute()
         } else {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
@@ -113,7 +112,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("$root/student/auth", "POST", data.toString(), callback).execute()
+            Server("/student/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -133,7 +132,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("$root/teacher/new", "POST", data.toString(), callback).execute()
+            Server("/teacher/new", "POST", data.toString(), callback).execute()
         } else {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
@@ -148,7 +147,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("$root/teacher/auth", "POST", data.toString(), callback).execute()
+            Server("/teacher/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -239,11 +238,11 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server("$root/student/teacher/list", "GET", null, callback)
+        Server("/student/teacher/list", "GET", null, callback)
 
         val callback1 = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
-                if (result != null && result.data != null && result.statusCode == 200) {
+                if (result?.data != null && result.statusCode == 200) {
                     val spinnerItems = mutableListOf<String>()
                     val json = JSONObject(result.data)
                     val classes = json.getJSONArray("classes")
@@ -257,7 +256,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server("$root/student/class/list", "GET", null, callback1)
+        Server("/student/class/list", "GET", null, callback1)
     }
 
     private fun setViews() {

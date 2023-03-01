@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
 
 private var teacherRequests = mutableListOf<JSONObject>()
-private val root = "http://192.168.160.176:8888"
 
 class Admin_teacherRequests : DialogFragment() {
     private lateinit var fragmentView: View
@@ -47,11 +46,13 @@ class Admin_teacherRequests : DialogFragment() {
                         setUI()
                     } else {
                         Utils.print("No teacher requests")
+                        val msg=fragmentView.findViewById<TextView>(R.id.tRegMsg)
+                        msg.visibility=View.VISIBLE
                     }
                 }
             }
         }
-        Server("$root/admin/requests", "GET", null, callback).execute()
+        Server("/admin/requests", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -59,14 +60,14 @@ class Admin_teacherRequests : DialogFragment() {
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = ItemAdapter(teacherRequests)
+        val adapter = AdapterAdminRequests(teacherRequests)
         recyclerView.adapter = adapter
 
     }
 }
 
-class ItemAdapter(private val items: MutableList<JSONObject>) :
-    RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
+    RecyclerView.Adapter<AdapterAdminRequests.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val username: TextView = view.findViewById(R.id.t_req_username)
@@ -97,7 +98,7 @@ class ItemAdapter(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("$root/admin/respond", "POST", json.toString(), callback).execute()
+            Server("/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -112,7 +113,7 @@ class ItemAdapter(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("$root/admin/respond", "POST", json.toString(), callback).execute()
+            Server("/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }

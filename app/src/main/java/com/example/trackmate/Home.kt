@@ -16,7 +16,6 @@ import java.io.File
 
 class Home : AppCompatActivity() {
     private val context = this
-    private val root = "http://192.168.1.5:8888"
     private lateinit  var msg :TextView
     private lateinit  var retry :Button
 
@@ -66,7 +65,7 @@ class Home : AppCompatActivity() {
                             }
                         }
                     }
-                    Server("$root/admin/auth", "POST", json.toString(), callback).execute()
+                    Server("/admin/auth", "POST", json.toString(), callback).execute()
                 }
                 "teacher" -> {
                     val callback = object : HttpCallback {
@@ -86,7 +85,7 @@ class Home : AppCompatActivity() {
                             }
                         }
                     }
-                    Server("$root/teacher/auth", "POST", json.toString(), callback).execute()
+                    Server("/teacher/auth", "POST", json.toString(), callback).execute()
                 }
                 "student" -> {
                     val callback = object : HttpCallback {
@@ -106,7 +105,7 @@ class Home : AppCompatActivity() {
                             }
                         }
                     }
-                    Server("$root/student/auth", "POST", json.toString(), callback).execute()
+                    Server("/student/auth", "POST", json.toString(), callback).execute()
                 }
             }
         }
@@ -131,7 +130,7 @@ class Home : AppCompatActivity() {
                 }
             }
         }
-        Server(root, "GET", null, callback).execute()
+        Server("/", "GET", null, callback).execute()
     }
 
     fun writeFile(fname: String, data: JSONObject) {
