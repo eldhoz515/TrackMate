@@ -4,33 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".Login">
 
     <TextView
         android:id="@+id/loginMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="15dp"
+        android:background="#050B0A"
+        android:backgroundTint="#020B0B"
+        android:backgroundTintMode="src_in"
         android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#A80808"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="7dp" />
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="#03605F"
         android:inputType="text"
-        android:text="Username"
+        android:text="  Username"
         tools:layout_editor_absoluteX="145dp"
-        tools:layout_editor_absoluteY="447dp" />
+        tools:layout_editor_absoluteY="464dp" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
+        android:layout_width="210dp"
+        android:layout_height="40dp"
+        android:background="#454545"
         android:ems="10"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="555dp" />
+        tools:layout_editor_absoluteX="89dp"
+        tools:layout_editor_absoluteY="542dp" />
 
     <EditText
         android:id="@+id/name"
@@ -46,51 +56,59 @@
         android:layout_height="100dp"
         android:background="@drawable/administrator"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.43"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="242dp" />
+        tools:layout_editor_absoluteY="232dp" />
 
     <Button
         android:id="@+id/student"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/student_reading"
+        android:backgroundTint="#656262"
+        android:backgroundTintMode="add"
         android:outlineProvider="none"
         tools:layout_editor_absoluteX="24dp"
-        tools:layout_editor_absoluteY="406dp" />
+        tools:layout_editor_absoluteY="357dp"/>
 
     <Button
         android:id="@+id/teacher"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:background="@drawable/teaching"
         tools:layout_editor_absoluteX="274dp"
-        tools:layout_editor_absoluteY="406dp"
-        android:background="@drawable/teaching"/>
+        tools:layout_editor_absoluteY="357dp" />
 
     <Button
         android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign-Up"
-        tools:layout_editor_absoluteX="146dp"
-        tools:layout_editor_absoluteY="140dp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/user"
+        android:backgroundTint="#454242"
+        android:backgroundTintMode="add"
+        tools:layout_editor_absoluteX="262dp"
+        tools:layout_editor_absoluteY="59dp" />
 
     <Button
         android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        tools:layout_editor_absoluteX="146dp"
-        tools:layout_editor_absoluteY="52dp" />
+
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/login"
+        tools:layout_editor_absoluteX="74dp"
+        tools:layout_editor_absoluteY="59dp" />
 
     <Button
         android:id="@+id/request"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:text="Request"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="160dp"
+        android:background="@drawable/submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="92dp" />
+        tools:layout_editor_absoluteY="138dp" />
 
     <Spinner
         android:id="@+id/teachers_list"
@@ -102,6 +120,20 @@
         android:id="@+id/classes_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/bt_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/student_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter bluetooth address from settings>About phone>Status"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@
             android:id="@+id/c_list_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#7E1C1C">
+            android:background="#24304E">
 
         </androidx.recyclerview.widget.RecyclerView>
 

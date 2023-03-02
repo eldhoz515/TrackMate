@@ -21,7 +21,6 @@ class trash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trash)
-//        Utils.print(BluetoothAdapter.getDefaultAdapter().address.subSequence(5,10))
         checkPermissionsWrapper()
     }
 

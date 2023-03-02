@@ -23,7 +23,9 @@ class Login : AppCompatActivity() {
     private lateinit var name: EditText
     private lateinit var username: EditText
     private lateinit var password: EditText
+    private lateinit var bt_id: EditText
     private lateinit var msg: TextView
+    private lateinit var hint: TextView
     private var selectedTeacher: String? = null
     private var selectedClass: String? = null
 
@@ -49,6 +51,7 @@ class Login : AppCompatActivity() {
             if (profile == "student") {
                 json.put("class", selectedClass)
                 json.put("teacher", selectedTeacher)
+                json.put("id",bt_id.text.toString())
             }
         }
 
@@ -173,6 +176,10 @@ class Login : AppCompatActivity() {
                 msg.text = "Select your class and teacher"
                 valid = false
             }
+            if(bt_id.text.toString().length<17){
+                msg.text="Enter your bluetooth identifier"
+                valid=false
+            }
         }
         return valid
     }
@@ -271,19 +278,22 @@ class Login : AppCompatActivity() {
         name = findViewById(R.id.name)
         username = findViewById(R.id.username)
         password = findViewById(R.id.password)
+        bt_id = findViewById(R.id.bt_id)
         msg = findViewById(R.id.loginMsg)
+        hint = findViewById(R.id.student_hint)
     }
 
     private fun setProfile() {
-        when (profile) {
-            "student" -> {
-                teachersList.visibility = View.VISIBLE
-                classesList.visibility = View.VISIBLE
-            }
-            else -> {
-                teachersList.visibility = View.GONE
-                classesList.visibility = View.GONE
-            }
+        if (firstTime && profile == "student") {
+            teachersList.visibility = View.VISIBLE
+            classesList.visibility = View.VISIBLE
+            hint.visibility = View.VISIBLE
+            bt_id.visibility = View.VISIBLE
+        } else {
+            teachersList.visibility = View.GONE
+            classesList.visibility = View.GONE
+            hint.visibility = View.GONE
+            bt_id.visibility = View.GONE
         }
     }
 
