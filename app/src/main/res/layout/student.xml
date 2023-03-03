@@ -6,4 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".Student">
 
+    <Button
+        android:id="@+id/verify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/timer_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/verified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/used_apps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

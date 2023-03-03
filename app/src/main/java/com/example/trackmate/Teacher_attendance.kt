@@ -1,6 +1,5 @@
 package com.example.trackmate
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -8,19 +7,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,10 +19,13 @@ import org.json.JSONObject
 
 private lateinit var selectedClass: String
 private var students = JSONObject()
+private var studentsList = mutableListOf<JSONObject>()
 
 class Teacher_attendance : DialogFragment() {
     private lateinit var fragmentView: View
     private lateinit var classesList: Spinner
+    private lateinit var save: Button
+    private lateinit var retry: Button
     private var classes = mutableListOf<String>()
 
     override fun onCreateView(
@@ -58,7 +52,7 @@ class Teacher_attendance : DialogFragment() {
                         classes.add(json.get(className).toString())
                     }
                     if (classes.size > 0) {
-                        setupSpinner()
+                        setUI()
                     } else {
                         Utils.print("No classes")
                         val msg = fragmentView.findViewById<TextView>(R.id.text_no_class2)
@@ -70,9 +64,22 @@ class Teacher_attendance : DialogFragment() {
         Server("/teacher/class/list", "GET", null, callback).execute()
     }
 
+    private fun setUI() {
+        Utils.print("setUI()")
+        classesList = fragmentView.findViewById(R.id.t_a_c_list)
+        save = fragmentView.findViewById(R.id.mark_attendance)
+        retry = fragmentView.findViewById(R.id.check_attendance)
+        save.setOnClickListener {
+            markAttendance()
+        }
+        retry.setOnClickListener {
+            getAttendance()
+        }
+        setupSpinner()
+    }
+
     private fun setupSpinner() {
         Utils.print("setupSpinner()")
-        classesList = fragmentView.findViewById(R.id.t_a_c_list)
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, classes)
         classesList.adapter = adapter
@@ -91,7 +98,6 @@ class Teacher_attendance : DialogFragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Another interface callback
             }
         }
     }
@@ -104,8 +110,12 @@ class Teacher_attendance : DialogFragment() {
                 if (result?.data != null && result.statusCode == 200) {
                     val json = JSONObject(result.data)
                     for (student in json.keys()) {
-                        students.put("${json.getJSONObject(student).get("id")}",json.getJSONObject(student))
+                        students.put(
+                            "${json.getJSONObject(student).get("id")}",
+                            json.getJSONObject(student)
+                        )
                     }
+                    Utils.print(students)
                     if (students.length() > 0) {
                         getAttendance()
                     } else {
@@ -121,6 +131,8 @@ class Teacher_attendance : DialogFragment() {
 
     private fun getAttendance() {
         Utils.print("getAttendance()")
+        save.visibility = View.GONE
+        retry.visibility = View.GONE
         discoverDevices()
     }
 
@@ -144,7 +156,7 @@ class Teacher_attendance : DialogFragment() {
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                         Utils.print("discovery stopped")
-                        calculateAttendance()
+                        displayAttendance()
                     }
                 }
             }
@@ -160,17 +172,89 @@ class Teacher_attendance : DialogFragment() {
 
     private fun deviceFound(name: String, address: String) {
         Utils.print("Device found: $name ($address)")
-        if(students.get(address)!=null){
-            val student= students.getJSONObject(address)
-            student.put("attendance",1)
-            students.put(address,student)
-        }
-        else{
+        if (students.has(address)) {
+            val student = students.getJSONObject(address)
+            Utils.print("${student.get("username")} is nearby")
+            student.put("attendance", 1)
+            students.put(address, student)
+        } else {
             Utils.print("address not found")
         }
     }
 
-    private fun calculateAttendance() {
+    private fun displayAttendance() {
+        for (address in students.keys()) {
+            val student = students.getJSONObject(address)
+            if (student.has("attendance")) {
+                studentsList.add(student)
+            } else {
+                studentsList.add(0, student)
+            }
+        }
+        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_a_list_list)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+        val adapter = AdapterAttendanceList(studentsList)
+        recyclerView.adapter = adapter
+        save.visibility = View.VISIBLE
+        retry.visibility = View.VISIBLE
+    }
 
+    class AdapterAttendanceList(private val items: MutableList<JSONObject>) :
+        RecyclerView.Adapter<AdapterAttendanceList.ViewHolder>() {
+
+        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val name: TextView = view.findViewById(R.id.t_a_name)
+            val apps: TextView = view.findViewById(R.id.t_a_apps)
+            val attendance: TextView = view.findViewById(R.id.t_a_attendance)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.list_item_t_a_list, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val item = items[position]
+            holder.name.text = item.get("name").toString()
+            if (item.getJSONObject("status").getInt("apps") == 1) {
+                holder.apps.text = "used"
+            } else {
+                holder.apps.text = "didn't use"
+            }
+            if (item.has("attendance")) {
+                if (item.getJSONObject("status").getInt("auth") == 1)
+                    holder.attendance.text = "present"
+                else
+                    holder.attendance.text = "not sure"
+            } else {
+                holder.attendance.text = "absent"
+            }
+        }
+
+        override fun getItemCount() = items.size
+    }
+
+    private fun markAttendance() {
+        val json = JSONObject()
+        json.put("class", selectedClass)
+        val attendance = JSONObject()
+        for (student in studentsList) {
+            if (student.has("attendance"))
+                attendance.put(student.getString("username"), 1)
+            else
+                attendance.put(student.getString("username"), 0)
+        }
+        val callback = object : HttpCallback {
+            override fun onComplete(result: HttpResult?) {
+                if (result != null && result.statusCode == 200) {
+                    Utils.print("marked attendance successfully")
+                } else {
+                    Utils.print("marking attendance failed")
+                }
+            }
+        }
+        Server("/teacher/attendance", "POST", json.toString(), callback).execute()
     }
 }
