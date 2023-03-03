@@ -26,7 +26,7 @@ class Server(
 
     override fun doInBackground(vararg params: Void?): HttpResult? {
         try {
-            val root = "http://192.168.1.5:8888"
+            val root = "http://192.168.7.176:8888"
 //            Utils.print("$root$url")
             val urlObj = URL("$root$url")
             val connection = urlObj.openConnection() as HttpURLConnection

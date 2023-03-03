@@ -10,24 +10,44 @@
         android:id="@+id/verify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="559dp"
         android:text="Button"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="111dp" />
 
     <TextView
         android:id="@+id/timer_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginStart="202dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="152dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/verified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="253dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="53dp" />
 
     <TextView
         android:id="@+id/used_apps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_marginStart="199dp"
+        android:layout_marginEnd="39dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/timer_msg"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="19dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

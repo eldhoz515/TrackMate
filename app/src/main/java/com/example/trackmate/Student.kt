@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import org.json.JSONObject
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -25,6 +26,7 @@ class Student : AppCompatActivity() {
     private lateinit var timer_msg: TextView
     private lateinit var verified: TextView
     private lateinit var usedApps: TextView
+    private var creds = JSONObject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,31 @@ class Student : AppCompatActivity() {
         setStatus()
         sendStatus()
         getTimings()
-        checkTime()
+//        getCreds()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!screenOff) {
+            apps = true
+            sendStatus()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!screenOff) {
+            apps = true
+            sendStatus()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (!screenOff) {
+            apps = true
+            sendStatus()
+        }
     }
 
     private fun reset() {
@@ -97,6 +123,7 @@ class Student : AppCompatActivity() {
                                     checkTime()
                                 }
                             }
+                        countDownTimer.start()
                     }
                 }
             } else {
@@ -165,10 +192,11 @@ class Student : AppCompatActivity() {
                         timings.add(t.getJSONObject(i))
                     }
                     Utils.print(timings)
+                    checkTime()
                 }
             }
         }
-        Server("/student/timings", "GET", null, callback).execute()
+        Server("/admin/timings", "GET", null, callback).execute()
     }
 
     private fun getCancellationSignal(): CancellationSignal {
@@ -231,6 +259,10 @@ class Student : AppCompatActivity() {
         }
         val json = JSONObject()
         val status = JSONObject()
+        json.put("username", "arun")
+        json.put("class", "cse")
+//        json.put("username",creds.getString("username"))
+//        json.put("class",creds.getString("class"))
         if (authenticated)
             status.put("auth", 1)
         else
@@ -254,6 +286,22 @@ class Student : AppCompatActivity() {
             usedApps.text = "You have used other apps"
         } else {
             usedApps.text = "No other apps used"
+        }
+    }
+
+    private fun getCreds() {
+        val json = readFile("creds.json")
+        if (json != null)
+            creds = json
+    }
+
+    private fun readFile(fname: String): JSONObject? {
+        val file = File(filesDir, fname)
+        return if (file.exists()) {
+            val jsonString = file.readText()
+            JSONObject(jsonString)
+        } else {
+            null
         }
     }
 }

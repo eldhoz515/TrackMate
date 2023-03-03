@@ -34,6 +34,14 @@
         <activity
             android:name=".trash"
             android:exported="true">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Teacher"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,15 +52,9 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Teacher"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".Student"
-            android:exported="false">
+            android:exported="true">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
