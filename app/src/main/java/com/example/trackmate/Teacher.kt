@@ -29,7 +29,6 @@ class Teacher : AppCompatActivity() {
         val studentListFragment = Admin_studentsList()
         studentListFragment.show(supportFragmentManager, "Admin_studentsList")
     }
-//Warning : creds.json needed!!!!
     private fun notifications() {
         Utils.print("notifications()")
         checkRequests()
@@ -58,6 +57,8 @@ class Teacher : AppCompatActivity() {
         val file = readFile("creds.json")
 //        val file=JSONObject()
 //        file.put("username","arun")
+        //Todo
+
         if (file != null) {
             val data = JSONObject()
             teacherName = file.get("username").toString()
