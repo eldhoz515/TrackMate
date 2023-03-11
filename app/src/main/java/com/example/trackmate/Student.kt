@@ -123,7 +123,7 @@ class Student : AppCompatActivity() {
                         countDownTimer =
                             object : CountDownTimer((seconds * 1000).toLong(), 1 * 1000) {
                                 override fun onTick(millisUntilFinished: Long) {
-                                    val text = "Reset in ${formatTime(seconds)}"
+                                    val text = "Reset in ${formatTime((millisUntilFinished/1000).toInt())}"
                                     timer_msg.text = text
                                     Utils.print(text)
                                 }
@@ -165,6 +165,9 @@ class Student : AppCompatActivity() {
         timer_msg = findViewById(R.id.timer_msg)
         usedApps = findViewById(R.id.used_apps)
         verified = findViewById(R.id.verified)
+        findViewById<Button>(R.id.student_attendance).setOnClickListener {
+            //todo
+        }
         verify.setOnClickListener {
             authenticate()
         }

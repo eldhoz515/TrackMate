@@ -8,7 +8,9 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
@@ -21,7 +23,23 @@ class Teacher : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.teacher)
         Utils.print("launching Teacher")
-        checkPermissionsWrapper()
+        setUI()
+    }
+
+    private fun setUI() {
+        findViewById<Button>(R.id.student_attendance).setOnClickListener {
+            //todo
+        }
+        findViewById<Button>(R.id.teacher_check_a).setOnClickListener {
+            findViewById<TextView>(R.id.t_error).visibility= View.GONE
+            checkPermissionsWrapper()
+        }
+        findViewById<Button>(R.id.button_s_list).setOnClickListener {
+            manageStudents()
+        }
+        findViewById<Button>(R.id.s_req_notifier).setOnClickListener {
+            notifications()
+        }
     }
 
     private fun manageStudents() {
@@ -29,6 +47,7 @@ class Teacher : AppCompatActivity() {
         val studentListFragment = Admin_studentsList()
         studentListFragment.show(supportFragmentManager, "Admin_studentsList")
     }
+
     private fun notifications() {
         Utils.print("notifications()")
         checkRequests()
@@ -130,12 +149,13 @@ class Teacher : AppCompatActivity() {
                     checkServices()
                 } else {
                     Utils.print("Permissions not granted")
+                    findViewById<TextView>(R.id.t_error).visibility= View.VISIBLE
                 }
             }
         }
     }
 
-    private fun checkServices(){
+    private fun checkServices() {
         Utils.print("checkServices()")
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -146,8 +166,10 @@ class Teacher : AppCompatActivity() {
             getAttendance()
         else
             Utils.print("Services disabled")
+            findViewById<TextView>(R.id.t_error).visibility= View.VISIBLE
     }
-    private fun getAttendance(){
+
+    private fun getAttendance() {
         Utils.print("getAttendance()")
         val teacherAttendanceFragment = Teacher_attendance()
         teacherAttendanceFragment.show(supportFragmentManager, "Teacher_attendance")

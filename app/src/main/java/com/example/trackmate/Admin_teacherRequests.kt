@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
@@ -46,7 +45,7 @@ class Admin_teacherRequests : DialogFragment() {
                         setUI()
                     } else {
                         Utils.print("No teacher requests")
-                        val msg=fragmentView.findViewById<TextView>(R.id.tRegMsg)
+                        val msg=fragmentView.findViewById<TextView>(R.id.s_no_req)
                         msg.visibility=View.VISIBLE
                     }
                 }
@@ -57,7 +56,7 @@ class Admin_teacherRequests : DialogFragment() {
 
     private fun setUI() {
         Utils.print("setUI()")
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_req_list)
+        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         val adapter = AdapterAdminRequests(teacherRequests)

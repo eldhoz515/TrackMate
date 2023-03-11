@@ -58,7 +58,7 @@ class Teacher_attendance : DialogFragment() {
                         setUI()
                     } else {
                         Utils.print("No classes")
-                        val msg = fragmentView.findViewById<TextView>(R.id.text_no_class2)
+                        val msg = fragmentView.findViewById<TextView>(R.id.t_a_msg)
                         msg.visibility = View.VISIBLE
                     }
                 }
@@ -72,6 +72,8 @@ class Teacher_attendance : DialogFragment() {
         classesList = fragmentView.findViewById(R.id.t_a_c_list)
         save = fragmentView.findViewById(R.id.mark_attendance)
         retry = fragmentView.findViewById(R.id.check_attendance)
+        retry.visibility = View.VISIBLE
+        save.visibility = View.VISIBLE
         save.setOnClickListener {
             markAttendance()
         }
