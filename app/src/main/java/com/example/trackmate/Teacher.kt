@@ -27,11 +27,16 @@ class Teacher : AppCompatActivity() {
     }
 
     private fun setUI() {
+        Utils.print("setUI()")
+        val json = Utils.readFile(this, "creds.json")
+        if (json != null) {
+            findViewById<TextView>(R.id.teacher_username).text = json.getString("username")
+        }
         findViewById<Button>(R.id.student_attendance).setOnClickListener {
             //todo
         }
         findViewById<Button>(R.id.teacher_check_a).setOnClickListener {
-            findViewById<TextView>(R.id.t_error).visibility= View.GONE
+            findViewById<TextView>(R.id.t_error).visibility = View.GONE
             checkPermissionsWrapper()
         }
         findViewById<Button>(R.id.button_s_list).setOnClickListener {
@@ -82,7 +87,7 @@ class Teacher : AppCompatActivity() {
             val data = JSONObject()
             teacherName = file.get("username").toString()
             data.put("username", teacherName)
-            Server("/teacher/requests", "POST", data.toString(), callback).execute()
+            Server(this, "/teacher/requests", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -149,7 +154,7 @@ class Teacher : AppCompatActivity() {
                     checkServices()
                 } else {
                     Utils.print("Permissions not granted")
-                    findViewById<TextView>(R.id.t_error).visibility= View.VISIBLE
+                    findViewById<TextView>(R.id.t_error).visibility = View.VISIBLE
                 }
             }
         }
@@ -164,9 +169,10 @@ class Teacher : AppCompatActivity() {
             ))
         )
             getAttendance()
-        else
+        else {
             Utils.print("Services disabled")
-            findViewById<TextView>(R.id.t_error).visibility= View.VISIBLE
+            findViewById<TextView>(R.id.t_error).visibility = View.VISIBLE
+        }
     }
 
     private fun getAttendance() {

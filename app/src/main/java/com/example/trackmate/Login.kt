@@ -81,7 +81,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server("/admin/auth", "POST", data.toString(), callback).execute()
+        Server(this,"/admin/auth", "POST", data.toString(), callback).execute()
     }
 
     private fun studentRequest(firstTime: Boolean, data: JSONObject) {
@@ -100,7 +100,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("/student/new", "POST", data.toString(), callback).execute()
+            Server(this,"/student/new", "POST", data.toString(), callback).execute()
         } else {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
@@ -115,7 +115,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("/student/auth", "POST", data.toString(), callback).execute()
+            Server(this,"/student/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -135,7 +135,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("/teacher/new", "POST", data.toString(), callback).execute()
+            Server(this,"/teacher/new", "POST", data.toString(), callback).execute()
         } else {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
@@ -150,7 +150,7 @@ class Login : AppCompatActivity() {
                     }
                 }
             }
-            Server("/teacher/auth", "POST", data.toString(), callback).execute()
+            Server(this,"/teacher/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -245,7 +245,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server("/student/teacher/list", "GET", null, callback)
+        Server(this,"/student/teacher/list", "GET", null, callback)
 
         val callback1 = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
@@ -263,7 +263,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server("/student/class/list", "GET", null, callback1)
+        Server(this,"/student/class/list", "GET", null, callback1)
     }
 
     private fun setViews() {

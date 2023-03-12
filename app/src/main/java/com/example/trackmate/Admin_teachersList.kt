@@ -48,7 +48,7 @@ class Admin_teachersList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/teacher/list", "GET", null, callback).execute()
+        Server(Admin_teachersList().requireContext(),"/admin/teacher/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -90,7 +90,7 @@ class Admin_teachersList : DialogFragment() {
                         }
                     }
                 }
-                Server("/admin/teacher/remove", "POST", json.toString(), callback).execute()
+                Server(Admin_teachersList().requireContext(),"/admin/teacher/remove", "POST", json.toString(), callback).execute()
                 teachers.removeAt(pos)
                 notifyItemRemoved(pos)
             }

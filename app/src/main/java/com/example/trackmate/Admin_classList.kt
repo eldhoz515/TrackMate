@@ -14,6 +14,7 @@ import org.json.JSONObject
 private var classes = mutableListOf<String>()
 
 class Admin_classList : DialogFragment() {
+    val con=requireContext()
     private lateinit var fragmentView: View
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +49,7 @@ class Admin_classList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/class/list", "GET", null, callback).execute()
+        Server(con,"/admin/class/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -89,7 +90,7 @@ class Admin_classList : DialogFragment() {
                         }
                     }
                 }
-                Server("/admin/class/remove", "POST", json.toString(), callback).execute()
+                Server(Admin_classList().con,"/admin/class/remove", "POST", json.toString(), callback).execute()
                 classes.removeAt(pos)
                 notifyItemRemoved(pos)
             }

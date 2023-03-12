@@ -50,7 +50,7 @@ class Admin_studentsList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/class/list", "GET", null, callback).execute()
+        Server(Admin_studentsList().requireContext(),"/admin/class/list", "GET", null, callback).execute()
     }
 
     private fun setupSpinner() {
@@ -105,7 +105,7 @@ class Admin_studentsList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/class/view","POST",data.toString(),callback).execute()
+        Server(Admin_studentsList().requireContext(),"/admin/class/view","POST",data.toString(),callback).execute()
     }
 
     class AdapterStudentsList(private val items: MutableList<JSONObject>) :
@@ -141,7 +141,7 @@ class Admin_studentsList : DialogFragment() {
                         }
                     }
                 }
-                Server("/admin/student/remove", "POST", json.toString(), callback).execute()
+                Server(Admin_studentsList().requireContext(),"/admin/student/remove", "POST", json.toString(), callback).execute()
                 students.removeAt(pos)
                 notifyItemRemoved(pos)
             }

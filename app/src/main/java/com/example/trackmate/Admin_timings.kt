@@ -27,7 +27,7 @@ private fun request(json: JSONObject) {
             }
         }
     }
-    Server("/admin/timings", "POST", json.toString(), callback).execute()
+    Server(Admin_timings().requireContext(),"/admin/timings", "POST", json.toString(), callback).execute()
 }
 
 class Admin_timings : DialogFragment() {
@@ -63,7 +63,7 @@ class Admin_timings : DialogFragment() {
                 }
             }
         }
-        Server("/admin/timings", "GET", null, callback).execute()
+        Server(requireContext(),"/admin/timings", "GET", null, callback).execute()
     }
 
     private fun setUI() {

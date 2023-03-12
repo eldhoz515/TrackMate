@@ -66,7 +66,7 @@ class Teacher_studentRequests : DialogFragment() {
         }
         val data = JSONObject()
         data.put("username", teacherName)
-        Server("/teacher/requests", "POST", data.toString(), callback).execute()
+        Server(requireContext(),"/teacher/requests", "POST", data.toString(), callback).execute()
     }
 
     private fun setUI() {
@@ -112,7 +112,7 @@ class AdapterStudentRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/teacher/respond", "POST", json.toString(), callback).execute()
+            Server(Teacher_studentRequests().requireContext(),"/teacher/respond", "POST", json.toString(), callback).execute()
             studentRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -128,7 +128,7 @@ class AdapterStudentRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/teacher/respond", "POST", json.toString(), callback).execute()
+            Server(Teacher_studentRequests().requireContext(),"/teacher/respond", "POST", json.toString(), callback).execute()
             studentRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }

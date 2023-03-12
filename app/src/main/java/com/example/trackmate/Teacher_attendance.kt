@@ -64,7 +64,7 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server("/teacher/class/list", "GET", null, callback).execute()
+        Server(requireContext(),"/teacher/class/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -134,7 +134,7 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server("/teacher/class/view", "POST", data.toString(), callback).execute()
+        Server(requireContext(),"/teacher/class/view", "POST", data.toString(), callback).execute()
     }
 
     private fun getAttendance() {
@@ -280,6 +280,6 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server("/teacher/attendance", "POST", json.toString(), callback).execute()
+        Server(requireContext(),"/teacher/attendance", "POST", json.toString(), callback).execute()
     }
 }

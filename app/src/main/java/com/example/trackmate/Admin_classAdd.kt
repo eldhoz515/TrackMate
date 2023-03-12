@@ -44,7 +44,7 @@ class Admin_classAdd : DialogFragment() {
                 }
             }
         }
-        Server("/admin/class/list", "GET", null, callback).execute()
+        Server(requireContext(),"/admin/class/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -77,6 +77,6 @@ class Admin_classAdd : DialogFragment() {
         }
         val json = JSONObject()
         json.put("class", className.text.toString())
-        Server("/admin/class/add", "POST", json.toString(), callback).execute()
+        Server(requireContext(),"/admin/class/add", "POST", json.toString(), callback).execute()
     }
 }

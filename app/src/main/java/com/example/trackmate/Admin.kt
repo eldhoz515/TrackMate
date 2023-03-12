@@ -3,6 +3,7 @@ package com.example.trackmate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import org.json.JSONObject
 
 class Admin : AppCompatActivity() {
@@ -15,6 +16,10 @@ class Admin : AppCompatActivity() {
 
     private fun setUI() {
         Utils.print("setting UI")
+        val json = Utils.readFile(this, "creds.json")
+        if (json != null) {
+            findViewById<TextView>(R.id.admin_username).text = json.getString("username")
+        }
         findViewById<Button>(R.id.teacher_check_a).setOnClickListener {
             manageTimings()
         }
@@ -96,7 +101,7 @@ class Admin : AppCompatActivity() {
                 }
             }
         }
-        Server("/admin/requests", "POST", null, callback).execute()
+        Server(this, "/admin/requests", "POST", null, callback).execute()
     }
 
     private fun alert() {

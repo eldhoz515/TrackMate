@@ -51,7 +51,7 @@ class Admin_teacherRequests : DialogFragment() {
                 }
             }
         }
-        Server("/admin/requests", "GET", null, callback).execute()
+        Server(Admin_teacherRequests().requireContext(),"/admin/requests", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -97,7 +97,7 @@ class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/admin/respond", "POST", json.toString(), callback).execute()
+            Server(Admin_teacherRequests().requireContext(),"/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -112,7 +112,7 @@ class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/admin/respond", "POST", json.toString(), callback).execute()
+            Server(Admin_teacherRequests().requireContext(),"/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }

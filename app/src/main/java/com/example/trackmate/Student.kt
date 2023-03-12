@@ -161,6 +161,10 @@ class Student : AppCompatActivity() {
 
     private fun setUI() {
         Utils.print("setUI()")
+        val json = Utils.readFile(this, "creds.json")
+        if (json != null) {
+            findViewById<TextView>(R.id.student_username).text = json.getString("username")
+        }
         verify = findViewById(R.id.verify)
         timer_msg = findViewById(R.id.timer_msg)
         usedApps = findViewById(R.id.used_apps)
@@ -211,7 +215,7 @@ class Student : AppCompatActivity() {
                 }
             }
         }
-        Server("/admin/timings", "GET", null, callback).execute()
+        Server(this,"/admin/timings", "GET", null, callback).execute()
     }
 
     private fun getCancellationSignal(): CancellationSignal {
@@ -289,7 +293,7 @@ class Student : AppCompatActivity() {
             status.put("apps", 0)
         Utils.print(status)
         json.put("status", status)
-        Server("/student/status", "POST", json.toString(), callback).execute()
+        Server(this,"/student/status", "POST", json.toString(), callback).execute()
     }
 
     private fun setStatus() {
