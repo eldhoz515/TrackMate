@@ -4,136 +4,276 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#EC0909"
+    android:backgroundTintMode="src_in"
     android:visibility="visible"
     tools:context=".Login">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="238dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/signup"
+            android:layout_width="85dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="39dp"
+            android:layout_marginEnd="148dp"
+            android:backgroundTint="#FFFFFF"
+            android:backgroundTintMode="src_in"
+            android:fontFamily="@font/acme"
+            android:text="Sign up"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="85dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="27dp"
+            android:layout_marginEnd="36dp"
+            android:backgroundTint="#FFFFFF"
+            android:backgroundTintMode="src_in"
+            android:fontFamily="@font/acme"
+            android:text="Login"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/signup"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="408dp"
+        android:layout_height="355dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="319dp">
+
+        <EditText
+            android:id="@+id/username"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:background="#03605F"
+            android:inputType="text"
+            android:text="  Username"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="109dp"
+            android:layout_height="16dp"
+            android:inputType="textPersonName"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="18dp"
+            tools:layout_editor_absoluteY="24dp" />
+
+        <EditText
+            android:id="@+id/password"
+            style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
+            android:layout_width="202dp"
+            android:layout_height="26dp"
+            android:background="#454545"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="82dp" />
+
+        <Spinner
+            android:id="@+id/classes_list"
+            android:layout_width="116dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="134dp" />
+
+        <Spinner
+            android:id="@+id/teachers_list"
+            android:layout_width="150dp"
+            android:layout_height="13dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="134dp" />
+
+        <TextView
+            android:id="@+id/student_hint"
+            android:layout_width="322dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="28dp"
+            android:text="Enter bluetooth address from settings>About phone>Status"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="170dp" />
+
+        <EditText
+            android:id="@+id/bt_id"
+            android:layout_width="126dp"
+            android:layout_height="34dp"
+            android:inputType="text"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="116dp"
+            tools:layout_editor_absoluteY="215dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="348dp"
+        android:layout_height="215dp"
+        android:layout_marginTop="4dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <FrameLayout
+            android:id="@+id/frameLayout3"
+            android:layout_width="93dp"
+            android:layout_height="82dp"
+            android:layout_marginStart="256dp"
+            android:layout_marginTop="92dp"
+            android:background="@drawable/round"
+            android:backgroundTint="#F2232223"
+            android:backgroundTintMode="src_over"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/teaching" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout2"
+            android:layout_width="92dp"
+            android:layout_height="95dp"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/round"
+            android:backgroundTint="#F2232223"
+            android:backgroundTintMode="src_over"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/admin"
+                android:layout_width="wrap_content"
+                android:layout_height="74dp"
+                android:background="@drawable/administrator" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="95dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/round"
+            android:backgroundTint="#F2232223"
+            android:backgroundTintMode="src_over"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="84dp">
+
+            <Button
+                android:id="@+id/student"
+                android:layout_width="71dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/student_reading"
+                android:backgroundTint="#00656262"
+                android:backgroundTintMode="add"
+                android:outlineProvider="none" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="284dp"
+            android:layout_marginBottom="20dp"
+            android:text="Student"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.606" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="16dp"
+            android:text="Teacher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/loginMsg"
         android:layout_width="60dp"
         android:layout_height="15dp"
+        android:layout_marginStart="16dp"
         android:background="#050B0A"
         android:backgroundTint="#020B0B"
         android:backgroundTintMode="src_in"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="#A80808"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="7dp" />
-
-    <EditText
-        android:id="@+id/username"
-        style="@style/Widget.AppCompat.AutoCompleteTextView"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:background="#03605F"
-        android:inputType="text"
-        android:text="  Username"
-        tools:layout_editor_absoluteX="145dp"
-        tools:layout_editor_absoluteY="464dp" />
-
-    <EditText
-        android:id="@+id/password"
-        style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
-        android:layout_width="210dp"
-        android:layout_height="40dp"
-        android:background="#454545"
-        android:ems="10"
-        android:inputType="textPassword"
-        tools:layout_editor_absoluteX="89dp"
-        tools:layout_editor_absoluteY="542dp" />
-
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="TextView"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/admin"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/administrator"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="232dp" />
-
-    <Button
-        android:id="@+id/student"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/student_reading"
-        android:backgroundTint="#656262"
-        android:backgroundTintMode="add"
-        android:outlineProvider="none"
-        tools:layout_editor_absoluteX="24dp"
-        tools:layout_editor_absoluteY="357dp"/>
-
-    <Button
-        android:id="@+id/teacher"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/teaching"
-        tools:layout_editor_absoluteX="274dp"
-        tools:layout_editor_absoluteY="357dp" />
-
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/user"
-        android:backgroundTint="#454242"
-        android:backgroundTintMode="add"
-        tools:layout_editor_absoluteX="262dp"
-        tools:layout_editor_absoluteY="59dp" />
-
-    <Button
-        android:id="@+id/login"
-
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/login"
-        tools:layout_editor_absoluteX="74dp"
-        tools:layout_editor_absoluteY="59dp" />
+        tools:layout_editor_absoluteY="689dp" />
 
     <Button
         android:id="@+id/request"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="160dp"
-        android:background="@drawable/submit"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FAF5F5"
+        android:fontFamily="@font/acme"
+        android:text="Submit"
+        android:textColor="#050404"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.034"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="138dp" />
-
-    <Spinner
-        android:id="@+id/teachers_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
-    <Spinner
-        android:id="@+id/classes_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/bt_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/student_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter bluetooth address from settings>About phone>Status"
-        android:visibility="gone" />
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
