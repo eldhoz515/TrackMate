@@ -69,22 +69,23 @@
         android:id="@+id/verified"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginBottom="120dp"
         android:background="@drawable/tick_button"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout4"
         app:layout_constraintEnd_toStartOf="@+id/used_apps"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="394dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/used_apps"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="332dp"
+        android:layout_marginBottom="120dp"
         android:background="@drawable/mobile"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/verified"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
+        app:layout_constraintStart_toEndOf="@+id/verified" />
 
     <FrameLayout
         android:id="@+id/frameLayout4"

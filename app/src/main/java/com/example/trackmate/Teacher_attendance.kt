@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,7 @@ class Teacher_attendance : DialogFragment() {
     private lateinit var save: Button
     private lateinit var retry: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var group:Group
     private lateinit var adapter: Teacher_attendance.AdapterAttendanceList
 
     private var classes = mutableListOf<String>()
@@ -72,8 +74,7 @@ class Teacher_attendance : DialogFragment() {
         classesList = fragmentView.findViewById(R.id.t_a_c_list)
         save = fragmentView.findViewById(R.id.mark_attendance)
         retry = fragmentView.findViewById(R.id.check_attendance)
-        retry.visibility = View.VISIBLE
-        save.visibility = View.VISIBLE
+        group.visibility=View.VISIBLE
         save.setOnClickListener {
             markAttendance()
         }
@@ -139,8 +140,7 @@ class Teacher_attendance : DialogFragment() {
 
     private fun getAttendance() {
         Utils.print("getAttendance()")
-        save.visibility = View.GONE
-        retry.visibility = View.GONE
+        group.visibility=View.GONE
         Utils.print(studentsList)
         val t = studentsList.size
         studentsList = mutableListOf()
@@ -207,14 +207,14 @@ class Teacher_attendance : DialogFragment() {
             }
         }
         Utils.print(studentsList)
-        adapter = AdapterAttendanceList(studentsList)
+        adapter = AdapterAttendanceList(studentsList,requireContext())
         recyclerView.adapter = adapter
         recyclerView.visibility = View.VISIBLE
         save.visibility = View.VISIBLE
         retry.visibility = View.VISIBLE
     }
 
-    class AdapterAttendanceList(private val items: MutableList<JSONObject>) :
+    class AdapterAttendanceList(private val items: MutableList<JSONObject>,private val con: Context) :
         RecyclerView.Adapter<AdapterAttendanceList.ViewHolder>() {
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

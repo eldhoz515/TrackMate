@@ -1,5 +1,6 @@
 package com.example.trackmate
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +52,7 @@ class Admin_teacherRequests : DialogFragment() {
                 }
             }
         }
-        Server(Admin_teacherRequests().requireContext(),"/admin/requests", "GET", null, callback).execute()
+        Server(requireContext(),"/admin/requests", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -59,13 +60,13 @@ class Admin_teacherRequests : DialogFragment() {
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = AdapterAdminRequests(teacherRequests)
+        val adapter = AdapterAdminRequests(teacherRequests,requireContext())
         recyclerView.adapter = adapter
 
     }
 }
 
-class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
+class AdapterAdminRequests(private val items: MutableList<JSONObject>,private val con:Context) :
     RecyclerView.Adapter<AdapterAdminRequests.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -97,7 +98,7 @@ class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server(Admin_teacherRequests().requireContext(),"/admin/respond", "POST", json.toString(), callback).execute()
+            Server(con,"/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -112,7 +113,7 @@ class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server(Admin_teacherRequests().requireContext(),"/admin/respond", "POST", json.toString(), callback).execute()
+            Server(con,"/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }

@@ -12,6 +12,7 @@ class Admin : AppCompatActivity() {
         setContentView(R.layout.admin)
         Utils.print("launching Admin")
         setUI()
+        checkRequests()
     }
 
     private fun setUI() {
@@ -29,10 +30,10 @@ class Admin : AppCompatActivity() {
         findViewById<Button>(R.id.admin_add_class).setOnClickListener {
             addClass()
         }
-        findViewById<Button>(R.id.button_s_list).setOnClickListener {
+        findViewById<Button>(R.id.s_req_notifier).setOnClickListener {
             manageTeachers()
         }
-        findViewById<Button>(R.id.s_req_notifier).setOnClickListener {
+        findViewById<Button>(R.id.button_s_list).setOnClickListener {
             notifications()
         }
         findViewById<Button>(R.id.admin_view_students).setOnClickListener {
@@ -69,7 +70,7 @@ class Admin : AppCompatActivity() {
 
     private fun manageTeachers() {
         Utils.print("manageTeachers()")
-        val tListButton = findViewById<Button>(R.id.button_s_list)
+        val tListButton = findViewById<Button>(R.id.s_req_notifier)
         tListButton.setOnClickListener {
             val teacherListFragment = Admin_teachersList()
             teacherListFragment.show(supportFragmentManager, "Admin_teachersList")
@@ -78,12 +79,8 @@ class Admin : AppCompatActivity() {
 
     private fun notifications() {
         Utils.print("notifications()")
-        checkRequests()
-        val notification = findViewById<Button>(R.id.s_req_notifier)
-        notification.setOnClickListener {
-            val teacherReqFragment = Admin_teacherRequests()
-            teacherReqFragment.show(supportFragmentManager, "Admin_teacherRequests")
-        }
+        val teacherReqFragment = Admin_teacherRequests()
+        teacherReqFragment.show(supportFragmentManager, "Admin_teacherRequests")
     }
 
     private fun checkRequests() {

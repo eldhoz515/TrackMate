@@ -1,5 +1,6 @@
 package com.example.trackmate
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,12 +75,12 @@ class Teacher_studentRequests : DialogFragment() {
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = AdapterStudentRequests(studentRequests)
+        val adapter = AdapterStudentRequests(studentRequests,requireContext())
         recyclerView.adapter = adapter
     }
 }
 
-class AdapterStudentRequests(private val items: MutableList<JSONObject>) :
+class AdapterStudentRequests(private val items: MutableList<JSONObject>,private val con: Context) :
     RecyclerView.Adapter<AdapterStudentRequests.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -112,7 +113,7 @@ class AdapterStudentRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server(Teacher_studentRequests().requireContext(),"/teacher/respond", "POST", json.toString(), callback).execute()
+            Server(con,"/teacher/respond", "POST", json.toString(), callback).execute()
             studentRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -128,7 +129,7 @@ class AdapterStudentRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server(Teacher_studentRequests().requireContext(),"/teacher/respond", "POST", json.toString(), callback).execute()
+            Server(con,"/teacher/respond", "POST", json.toString(), callback).execute()
             studentRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
