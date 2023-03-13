@@ -20,12 +20,15 @@ class Login : AppCompatActivity() {
     private lateinit var request: Button
     private lateinit var teachersList: Spinner
     private lateinit var classesList: Spinner
+    private lateinit var hintClass: TextView
+    private lateinit var hintTeacher: TextView
     private lateinit var name: EditText
     private lateinit var username: EditText
     private lateinit var password: EditText
     private lateinit var bt_id: EditText
     private lateinit var msg: TextView
     private lateinit var hint: TextView
+    private lateinit var loading: View
     private var selectedTeacher: String? = null
     private var selectedClass: String? = null
 
@@ -40,9 +43,12 @@ class Login : AppCompatActivity() {
 
     private fun onRequest() {
         Utils.print("onRequest()")
-        if (!validation())
+        if (!validation()) {
+            request.visibility = View.VISIBLE
             return
+        }
         msg.visibility = View.INVISIBLE
+        Utils.start(loading)
         val json = JSONObject()
         json.put("username", username.text.toString().lowercase())
         json.put("password", password.text.toString())
@@ -51,7 +57,7 @@ class Login : AppCompatActivity() {
             if (profile == "student") {
                 json.put("class", selectedClass)
                 json.put("teacher", selectedTeacher)
-                json.put("id",bt_id.text.toString())
+                json.put("id", bt_id.text.toString())
             }
         }
 
@@ -72,8 +78,11 @@ class Login : AppCompatActivity() {
         Utils.print("adminRequest()")
         val callback = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
+                Utils.end(loading)
+                request.visibility = View.VISIBLE
                 if (result == null || result.statusCode != 200) {
                     msg.text = "Invalid credentials"
+                    msg.visibility = View.VISIBLE
                 } else {
                     writeFile("creds.json", data)
                     startActivity(Intent(context, Admin::class.java))
@@ -81,7 +90,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server(this,"/admin/auth", "POST", data.toString(), callback).execute()
+        Server(this, "/admin/auth", "POST", data.toString(), callback).execute()
     }
 
     private fun studentRequest(firstTime: Boolean, data: JSONObject) {
@@ -89,33 +98,41 @@ class Login : AppCompatActivity() {
         if (firstTime) {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
+                    Utils.end(loading)
+                    request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Home::class.java))
                         finish()
                     } else if (result != null && result.statusCode == 401) {
                         msg.text = "Account already exists"
+                        msg.visibility = View.VISIBLE
                     } else {
                         msg.text = "Invalid credentials"
+                        msg.visibility = View.VISIBLE
                     }
                 }
             }
-            Server(this,"/student/new", "POST", data.toString(), callback).execute()
+            Server(this, "/student/new", "POST", data.toString(), callback).execute()
         } else {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
+                    Utils.end(loading)
+                    request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Student::class.java))
                         finish()
                     } else if (result != null && result.statusCode == 401) {
                         msg.text = "Invalid credentials"
+                        msg.visibility = View.VISIBLE
                     } else {
                         msg.text = "No matching account accepted in class"
+                        msg.visibility = View.VISIBLE
                     }
                 }
             }
-            Server(this,"/student/auth", "POST", data.toString(), callback).execute()
+            Server(this, "/student/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -124,33 +141,41 @@ class Login : AppCompatActivity() {
         if (firstTime) {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
+                    Utils.end(loading)
+                    request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Home::class.java))
                         finish()
                     } else if (result != null && result.statusCode == 401) {
                         msg.text = "Account already exists"
+                        msg.visibility = View.VISIBLE
                     } else {
                         msg.text = "Invalid credentials"
+                        msg.visibility = View.VISIBLE
                     }
                 }
             }
-            Server(this,"/teacher/new", "POST", data.toString(), callback).execute()
+            Server(this, "/teacher/new", "POST", data.toString(), callback).execute()
         } else {
             val callback = object : HttpCallback {
                 override fun onComplete(result: HttpResult?) {
+                    Utils.end(loading)
+                    request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Teacher::class.java))
                         finish()
                     } else if (result != null && result.statusCode == 401) {
                         msg.text = "Invalid credentials"
+                        msg.visibility = View.VISIBLE
                     } else {
                         msg.text = "No matching account accepted by Admin"
+                        msg.visibility = View.VISIBLE
                     }
                 }
             }
-            Server(this,"/teacher/auth", "POST", data.toString(), callback).execute()
+            Server(this, "/teacher/auth", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -176,11 +201,13 @@ class Login : AppCompatActivity() {
                 msg.text = "Select your class and teacher"
                 valid = false
             }
-            if(bt_id.text.toString().length<17){
-                msg.text="Enter your bluetooth identifier"
-                valid=false
+            if (bt_id.text.toString().length != 17) {
+                msg.text = "Invalid bluetooth identifier"
+                valid = false
             }
         }
+        if (!valid)
+            msg.visibility = View.VISIBLE
         return valid
     }
 
@@ -211,20 +238,29 @@ class Login : AppCompatActivity() {
         listOf(admin, teacher, student).forEach { button ->
             run {
                 button.setOnClickListener {
-                    profile = button.text.toString().lowercase()
+                    profile = button.tag.toString().lowercase()
                     setProfile()
+                    admin.alpha = 0.2F
+                    teacher.alpha = 0.2F
+                    student.alpha = 0.2F
+                    button.alpha = 1F
                 }
             }
         }
         signup.setOnClickListener {
             firstTime = true
             setFirstTime()
+            login.alpha = 0.2F
+            signup.alpha = 1F
         }
         login.setOnClickListener {
             firstTime = false
             setFirstTime()
+            login.alpha = 1F
+            signup.alpha = 0.2F
         }
         request.setOnClickListener {
+            request.visibility = View.INVISIBLE
             onRequest()
         }
     }
@@ -245,7 +281,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server(this,"/student/teacher/list", "GET", null, callback)
+        Server(this, "/student/teacher/list", "GET", null, callback)
 
         val callback1 = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
@@ -263,7 +299,7 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server(this,"/student/class/list", "GET", null, callback1)
+        Server(this, "/student/class/list", "GET", null, callback1)
     }
 
     private fun setViews() {
@@ -281,17 +317,26 @@ class Login : AppCompatActivity() {
         bt_id = findViewById(R.id.bt_id)
         msg = findViewById(R.id.loginMsg)
         hint = findViewById(R.id.student_hint)
+        hintClass = findViewById(R.id.hint_class_list)
+        hintTeacher = findViewById(R.id.hint_t_list)
+        loading = findViewById(R.id.loading_login)
     }
 
     private fun setProfile() {
-        if (firstTime && profile == "student") {
-            teachersList.visibility = View.VISIBLE
+        if (profile == "student") {
             classesList.visibility = View.VISIBLE
+            hintClass.visibility = View.VISIBLE
             hint.visibility = View.VISIBLE
             bt_id.visibility = View.VISIBLE
+            if (firstTime) {
+                teachersList.visibility = View.VISIBLE
+                hintTeacher.visibility = View.VISIBLE
+            }
         } else {
             teachersList.visibility = View.GONE
             classesList.visibility = View.GONE
+            hintClass.visibility = View.GONE
+            hintTeacher.visibility = View.GONE
             hint.visibility = View.GONE
             bt_id.visibility = View.GONE
         }
