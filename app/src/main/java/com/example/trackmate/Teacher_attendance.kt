@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,10 @@ class Teacher_attendance : DialogFragment() {
     private lateinit var classesList: Spinner
     private lateinit var save: Button
     private lateinit var retry: Button
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var group:Group
+    private lateinit var adapter: Teacher_attendance.AdapterAttendanceList
+
     private var classes = mutableListOf<String>()
 
     override fun onCreateView(
@@ -55,13 +60,13 @@ class Teacher_attendance : DialogFragment() {
                         setUI()
                     } else {
                         Utils.print("No classes")
-                        val msg = fragmentView.findViewById<TextView>(R.id.text_no_class2)
+                        val msg = fragmentView.findViewById<TextView>(R.id.t_a_msg)
                         msg.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        Server("/teacher/class/list", "GET", null, callback).execute()
+        Server(requireContext(),"/teacher/class/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -69,12 +74,16 @@ class Teacher_attendance : DialogFragment() {
         classesList = fragmentView.findViewById(R.id.t_a_c_list)
         save = fragmentView.findViewById(R.id.mark_attendance)
         retry = fragmentView.findViewById(R.id.check_attendance)
+        group.visibility=View.VISIBLE
         save.setOnClickListener {
             markAttendance()
         }
         retry.setOnClickListener {
             getAttendance()
         }
+        recyclerView = fragmentView.findViewById(R.id.t_a_list_list)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
         setupSpinner()
     }
 
@@ -126,13 +135,16 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server("/teacher/class/view", "POST", data.toString(), callback).execute()
+        Server(requireContext(),"/teacher/class/view", "POST", data.toString(), callback).execute()
     }
 
     private fun getAttendance() {
         Utils.print("getAttendance()")
-        save.visibility = View.GONE
-        retry.visibility = View.GONE
+        group.visibility=View.GONE
+        Utils.print(studentsList)
+        val t = studentsList.size
+        studentsList = mutableListOf()
+        recyclerView.visibility = View.INVISIBLE
         discoverDevices()
     }
 
@@ -183,6 +195,9 @@ class Teacher_attendance : DialogFragment() {
     }
 
     private fun displayAttendance() {
+        Utils.print("displayAttendance()")
+        Utils.print(students)
+        studentsList = mutableListOf()
         for (address in students.keys()) {
             val student = students.getJSONObject(address)
             if (student.has("attendance")) {
@@ -191,16 +206,15 @@ class Teacher_attendance : DialogFragment() {
                 studentsList.add(0, student)
             }
         }
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_a_list_list)
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-        val adapter = AdapterAttendanceList(studentsList)
+        Utils.print(studentsList)
+        adapter = AdapterAttendanceList(studentsList,requireContext())
         recyclerView.adapter = adapter
+        recyclerView.visibility = View.VISIBLE
         save.visibility = View.VISIBLE
         retry.visibility = View.VISIBLE
     }
 
-    class AdapterAttendanceList(private val items: MutableList<JSONObject>) :
+    class AdapterAttendanceList(private val items: MutableList<JSONObject>,private val con: Context) :
         RecyclerView.Adapter<AdapterAttendanceList.ViewHolder>() {
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -218,16 +232,25 @@ class Teacher_attendance : DialogFragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = items[position]
             holder.name.text = item.get("name").toString()
-            if (item.getJSONObject("status").getInt("apps") == 1) {
-                holder.apps.text = "used"
+            if (item.has("status")) {
+
+                if (item.getJSONObject("status").getInt("apps") == 1) {
+                    holder.apps.text = "used"
+                } else {
+                    holder.apps.text = "didn't use"
+                }
             } else {
-                holder.apps.text = "didn't use"
+                holder.apps.text = "used"
             }
             if (item.has("attendance")) {
-                if (item.getJSONObject("status").getInt("auth") == 1)
-                    holder.attendance.text = "present"
-                else
+                if (item.has("status")) {
+                    if (item.getJSONObject("status").getInt("auth") == 1)
+                        holder.attendance.text = "present"
+                    else
+                        holder.attendance.text = "not sure"
+                } else {
                     holder.attendance.text = "not sure"
+                }
             } else {
                 holder.attendance.text = "absent"
             }
@@ -246,6 +269,8 @@ class Teacher_attendance : DialogFragment() {
             else
                 attendance.put(student.getString("username"), 0)
         }
+        json.put("attendance", attendance)
+        Utils.print(json)
         val callback = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
                 if (result != null && result.statusCode == 200) {
@@ -255,6 +280,6 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server("/teacher/attendance", "POST", json.toString(), callback).execute()
+        Server(requireContext(),"/teacher/attendance", "POST", json.toString(), callback).execute()
     }
 }

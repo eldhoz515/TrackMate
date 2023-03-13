@@ -1,5 +1,6 @@
 package com.example.trackmate
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +49,7 @@ class Admin_teachersList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/teacher/list", "GET", null, callback).execute()
+        Server(requireContext(),"/admin/teacher/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -56,11 +57,11 @@ class Admin_teachersList : DialogFragment() {
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_list_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = AdapterTeachersList(teachers)
+        val adapter = AdapterTeachersList(teachers,requireContext())
         recyclerView.adapter = adapter
     }
 
-    class AdapterTeachersList(private val items: MutableList<JSONObject>) :
+    class AdapterTeachersList(private val items: MutableList<JSONObject>,private val con: Context) :
         RecyclerView.Adapter<AdapterTeachersList.ViewHolder>() {
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -90,7 +91,7 @@ class Admin_teachersList : DialogFragment() {
                         }
                     }
                 }
-                Server("/admin/teacher/remove", "POST", json.toString(), callback).execute()
+                Server(con,"/admin/teacher/remove", "POST", json.toString(), callback).execute()
                 teachers.removeAt(pos)
                 notifyItemRemoved(pos)
             }

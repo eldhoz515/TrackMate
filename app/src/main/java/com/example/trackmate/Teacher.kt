@@ -8,7 +8,9 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
@@ -21,7 +23,29 @@ class Teacher : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.teacher)
         Utils.print("launching Teacher")
-        checkPermissionsWrapper()
+        setUI()
+        checkRequests()
+    }
+
+    private fun setUI() {
+        Utils.print("setUI()")
+        val json = Utils.readFile(this, "creds.json")
+        if (json != null) {
+            findViewById<TextView>(R.id.teacher_username).text = json.getString("username")
+        }
+        findViewById<Button>(R.id.student_attendance).setOnClickListener {
+            //todo
+        }
+        findViewById<Button>(R.id.teacher_check_a).setOnClickListener {
+            findViewById<TextView>(R.id.t_error).visibility = View.GONE
+            checkPermissionsWrapper()
+        }
+        findViewById<Button>(R.id.button_s_list).setOnClickListener {
+            manageStudents()
+        }
+        findViewById<Button>(R.id.s_req_notifier).setOnClickListener {
+            notifications()
+        }
     }
 
     private fun manageStudents() {
@@ -29,15 +53,11 @@ class Teacher : AppCompatActivity() {
         val studentListFragment = Admin_studentsList()
         studentListFragment.show(supportFragmentManager, "Admin_studentsList")
     }
-//Warning : creds.json needed!!!!
+
     private fun notifications() {
         Utils.print("notifications()")
-        checkRequests()
-        val notification = findViewById<Button>(R.id.s_req_notifier)
-        notification.setOnClickListener {
-            val teacherReqFragment = Teacher_studentRequests.newInstance(teacherName)
-            teacherReqFragment.show(supportFragmentManager, "Teacher_studentRequests")
-        }
+        val teacherReqFragment = Teacher_studentRequests.newInstance(teacherName)
+        teacherReqFragment.show(supportFragmentManager, "Teacher_studentRequests")
     }
 
     private fun checkRequests() {
@@ -58,11 +78,13 @@ class Teacher : AppCompatActivity() {
         val file = readFile("creds.json")
 //        val file=JSONObject()
 //        file.put("username","arun")
+        //Todo
+
         if (file != null) {
             val data = JSONObject()
             teacherName = file.get("username").toString()
             data.put("username", teacherName)
-            Server("/teacher/requests", "POST", data.toString(), callback).execute()
+            Server(this, "/teacher/requests", "POST", data.toString(), callback).execute()
         }
     }
 
@@ -129,12 +151,13 @@ class Teacher : AppCompatActivity() {
                     checkServices()
                 } else {
                     Utils.print("Permissions not granted")
+                    findViewById<TextView>(R.id.t_error).visibility = View.VISIBLE
                 }
             }
         }
     }
 
-    private fun checkServices(){
+    private fun checkServices() {
         Utils.print("checkServices()")
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -143,10 +166,13 @@ class Teacher : AppCompatActivity() {
             ))
         )
             getAttendance()
-        else
+        else {
             Utils.print("Services disabled")
+            findViewById<TextView>(R.id.t_error).visibility = View.VISIBLE
+        }
     }
-    private fun getAttendance(){
+
+    private fun getAttendance() {
         Utils.print("getAttendance()")
         val teacherAttendanceFragment = Teacher_attendance()
         teacherAttendanceFragment.show(supportFragmentManager, "Teacher_attendance")

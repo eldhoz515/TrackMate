@@ -1,5 +1,6 @@
 package com.example.trackmate
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,7 @@ class Admin_studentsList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/class/list", "GET", null, callback).execute()
+        Server(requireContext(),"/admin/class/list", "GET", null, callback).execute()
     }
 
     private fun setupSpinner() {
@@ -94,7 +95,7 @@ class Admin_studentsList : DialogFragment() {
                         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_list_list)
                         val layoutManager = LinearLayoutManager(context)
                         recyclerView.layoutManager = layoutManager
-                        val adapter = AdapterStudentsList(students)
+                        val adapter = AdapterStudentsList(students,requireContext())
                         recyclerView.adapter = adapter
                     }
                     else{
@@ -105,10 +106,10 @@ class Admin_studentsList : DialogFragment() {
                 }
             }
         }
-        Server("/admin/class/view","POST",data.toString(),callback).execute()
+        Server(requireContext(),"/admin/class/view","POST",data.toString(),callback).execute()
     }
 
-    class AdapterStudentsList(private val items: MutableList<JSONObject>) :
+    class AdapterStudentsList(private val items: MutableList<JSONObject>,private val con: Context) :
         RecyclerView.Adapter<AdapterStudentsList.ViewHolder>() {
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -141,7 +142,7 @@ class Admin_studentsList : DialogFragment() {
                         }
                     }
                 }
-                Server("/admin/student/remove", "POST", json.toString(), callback).execute()
+                Server(con,"/admin/student/remove", "POST", json.toString(), callback).execute()
                 students.removeAt(pos)
                 notifyItemRemoved(pos)
             }

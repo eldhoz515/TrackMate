@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.CountDownTimer
+import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -33,36 +34,34 @@ class Student : AppCompatActivity() {
         setContentView(R.layout.student)
         Utils.print("launching Student")
         apps = true
+        init()
+    }
+
+    private fun init() {
         setUI()
         setListener()
         setStatus()
         sendStatus()
         getTimings()
-//        getCreds()
+        getCreds()
     }
 
     override fun onStop() {
         super.onStop()
-        if (!screenOff) {
-            apps = true
-            sendStatus()
-        }
+        Utils.print("stop")
+        monitor()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!screenOff) {
-            apps = true
-            sendStatus()
-        }
+        Utils.print("destroy")
+        monitor()
     }
 
     override fun onPause() {
         super.onPause()
-        if (!screenOff) {
-            apps = true
-            sendStatus()
-        }
+        Utils.print("pause")
+        monitor()
     }
 
     private fun reset() {
@@ -71,6 +70,17 @@ class Student : AppCompatActivity() {
         authenticated = false
         alert()
         setStatus()
+    }
+
+    private fun monitor() {
+        Handler().postDelayed({
+            Utils.print("monitor()")
+            if (!screenOff) {
+                apps = true
+                sendStatus()
+                setStatus()
+            }
+        }, 2000)
     }
 
     private fun alert() {
@@ -113,7 +123,7 @@ class Student : AppCompatActivity() {
                         countDownTimer =
                             object : CountDownTimer((seconds * 1000).toLong(), 1 * 1000) {
                                 override fun onTick(millisUntilFinished: Long) {
-                                    val text = "Reset in ${formatTime(seconds)}"
+                                    val text = "Reset in ${formatTime((millisUntilFinished/1000).toInt())}"
                                     timer_msg.text = text
                                     Utils.print(text)
                                 }
@@ -151,10 +161,17 @@ class Student : AppCompatActivity() {
 
     private fun setUI() {
         Utils.print("setUI()")
+        val json = Utils.readFile(this, "creds.json")
+        if (json != null) {
+            findViewById<TextView>(R.id.student_username).text = json.getString("username")
+        }
         verify = findViewById(R.id.verify)
         timer_msg = findViewById(R.id.timer_msg)
         usedApps = findViewById(R.id.used_apps)
         verified = findViewById(R.id.verified)
+        findViewById<Button>(R.id.student_attendance).setOnClickListener {
+            //todo
+        }
         verify.setOnClickListener {
             authenticate()
         }
@@ -167,9 +184,11 @@ class Student : AppCompatActivity() {
                 when (intent.action) {
                     Intent.ACTION_SCREEN_ON -> {
                         screenOff = false
+                        Utils.print("screen on")
                     }
                     Intent.ACTION_SCREEN_OFF -> {
                         screenOff = true
+                        Utils.print("screen off")
                     }
                 }
             }
@@ -196,7 +215,7 @@ class Student : AppCompatActivity() {
                 }
             }
         }
-        Server("/admin/timings", "GET", null, callback).execute()
+        Server(this,"/admin/timings", "GET", null, callback).execute()
     }
 
     private fun getCancellationSignal(): CancellationSignal {
@@ -263,6 +282,7 @@ class Student : AppCompatActivity() {
         json.put("class", "cse")
 //        json.put("username",creds.getString("username"))
 //        json.put("class",creds.getString("class"))
+//        Todo
         if (authenticated)
             status.put("auth", 1)
         else
@@ -273,7 +293,7 @@ class Student : AppCompatActivity() {
             status.put("apps", 0)
         Utils.print(status)
         json.put("status", status)
-        Server("/student/status", "POST", json.toString(), callback).execute()
+        Server(this,"/student/status", "POST", json.toString(), callback).execute()
     }
 
     private fun setStatus() {

@@ -1,5 +1,6 @@
 package com.example.trackmate
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
@@ -46,27 +46,27 @@ class Admin_teacherRequests : DialogFragment() {
                         setUI()
                     } else {
                         Utils.print("No teacher requests")
-                        val msg=fragmentView.findViewById<TextView>(R.id.tRegMsg)
+                        val msg=fragmentView.findViewById<TextView>(R.id.s_no_req)
                         msg.visibility=View.VISIBLE
                     }
                 }
             }
         }
-        Server("/admin/requests", "GET", null, callback).execute()
+        Server(requireContext(),"/admin/requests", "GET", null, callback).execute()
     }
 
     private fun setUI() {
         Utils.print("setUI()")
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.t_req_list)
+        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_req_list)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = AdapterAdminRequests(teacherRequests)
+        val adapter = AdapterAdminRequests(teacherRequests,requireContext())
         recyclerView.adapter = adapter
 
     }
 }
 
-class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
+class AdapterAdminRequests(private val items: MutableList<JSONObject>,private val con:Context) :
     RecyclerView.Adapter<AdapterAdminRequests.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -98,7 +98,7 @@ class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/admin/respond", "POST", json.toString(), callback).execute()
+            Server(con,"/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
@@ -113,7 +113,7 @@ class AdapterAdminRequests(private val items: MutableList<JSONObject>) :
                         Utils.print("responded successfully")
                 }
             }
-            Server("/admin/respond", "POST", json.toString(), callback).execute()
+            Server(con,"/admin/respond", "POST", json.toString(), callback).execute()
             teacherRequests.removeAt(pos)
             notifyItemRemoved(pos)
         }
