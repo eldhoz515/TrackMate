@@ -52,13 +52,14 @@ class Login : AppCompatActivity() {
         val json = JSONObject()
         json.put("username", username.text.toString().lowercase())
         json.put("password", password.text.toString())
+        if (profile == "student") {
+            json.put("class", selectedClass)
+            json.put("id", bt_id.text.toString())
+        }
         if (firstTime) {
             json.put("name", name.text.toString())
-            if (profile == "student") {
-                json.put("class", selectedClass)
+            if (profile == "student")
                 json.put("teacher", selectedTeacher)
-                json.put("id", bt_id.text.toString())
-            }
         }
 
         when (profile) {
@@ -84,6 +85,7 @@ class Login : AppCompatActivity() {
                     msg.text = "Invalid credentials"
                     msg.visibility = View.VISIBLE
                 } else {
+                    data.put("type", "admin")
                     writeFile("creds.json", data)
                     startActivity(Intent(context, Admin::class.java))
                     finish()
@@ -101,6 +103,7 @@ class Login : AppCompatActivity() {
                     Utils.end(loading)
                     request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
+                        data.put("type", "student")
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Home::class.java))
                         finish()
@@ -120,6 +123,7 @@ class Login : AppCompatActivity() {
                     Utils.end(loading)
                     request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
+                        data.put("type", "student")
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Student::class.java))
                         finish()
@@ -144,6 +148,7 @@ class Login : AppCompatActivity() {
                     Utils.end(loading)
                     request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
+                        data.put("type", "teacher")
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Home::class.java))
                         finish()
@@ -163,6 +168,7 @@ class Login : AppCompatActivity() {
                     Utils.end(loading)
                     request.visibility = View.VISIBLE
                     if (result != null && result.statusCode == 200) {
+                        data.put("type", "teacher")
                         writeFile("creds.json", data)
                         startActivity(Intent(context, Teacher::class.java))
                         finish()
@@ -212,6 +218,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun setUI() {
+        Utils.print("setUI()")
         setViews()
         getLists()
         listOf(teachersList, classesList).forEach { spinner ->
@@ -266,11 +273,12 @@ class Login : AppCompatActivity() {
     }
 
     private fun getLists() {
+        Utils.print("getLists()")
         val callback = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
                 if (result != null && result.data != null && result.statusCode == 200) {
                     val spinnerItems = mutableListOf<String>()
-                    val json = JSONObject(result.data)
+                    val json = JSONObject(result.data).getJSONObject("teachers")
                     for (teacher in json.keys()) {
                         val name = json.getJSONObject(teacher).get("name").toString()
                         spinnerItems.add(name)
@@ -278,10 +286,11 @@ class Login : AppCompatActivity() {
                     val adapter =
                         ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerItems)
                     teachersList.adapter = adapter
+                    Utils.print(spinnerItems)
                 }
             }
         }
-        Server(this, "/student/teacher/list", "GET", null, callback)
+        Server(this, "/student/teacher/list", "GET", null, callback).execute()
 
         val callback1 = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
@@ -299,10 +308,11 @@ class Login : AppCompatActivity() {
                 }
             }
         }
-        Server(this, "/student/class/list", "GET", null, callback1)
+        Server(this, "/student/class/list", "GET", null, callback1).execute()
     }
 
     private fun setViews() {
+        Utils.print("setViews()")
         admin = findViewById(R.id.admin)
         teacher = findViewById(R.id.teacher)
         student = findViewById(R.id.student)
@@ -334,9 +344,9 @@ class Login : AppCompatActivity() {
             }
         } else {
             teachersList.visibility = View.GONE
+            hintTeacher.visibility = View.GONE
             classesList.visibility = View.GONE
             hintClass.visibility = View.GONE
-            hintTeacher.visibility = View.GONE
             hint.visibility = View.GONE
             bt_id.visibility = View.GONE
         }
@@ -345,9 +355,18 @@ class Login : AppCompatActivity() {
     private fun setFirstTime() {
         if (firstTime) {
             name.visibility = View.VISIBLE
+            if (profile == "student") {
+                teachersList.visibility = View.VISIBLE
+                hintTeacher.visibility = View.VISIBLE
+            }
         } else {
             name.visibility = View.GONE
+            if (profile == "student") {
+                teachersList.visibility = View.GONE
+                hintTeacher.visibility = View.GONE
+            }
         }
+        setProfile()
     }
 
     private fun writeFile(fname: String, data: JSONObject) {

@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
 
-private lateinit var selectedClass: String
-private var students = JSONObject()
-private var studentsList = mutableListOf<JSONObject>()
 
 class Teacher_attendance : DialogFragment() {
+    private lateinit var selectedClass: String
+    private var students = JSONObject()
+    private var studentsList = mutableListOf<JSONObject>()
     private lateinit var fragmentView: View
     private lateinit var classesList: Spinner
     private lateinit var save: Button
@@ -32,7 +32,10 @@ class Teacher_attendance : DialogFragment() {
     private lateinit var adapter: Teacher_attendance.AdapterAttendanceList
 
     private var classes = mutableListOf<String>()
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Dialog)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

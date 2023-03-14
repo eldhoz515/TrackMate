@@ -1,15 +1,19 @@
 package com.example.trackmate
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.content.*
+import android.content.pm.PackageManager
 import android.hardware.biometrics.BiometricPrompt
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.CancellationSignal
-import android.os.CountDownTimer
-import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import org.json.JSONObject
 import java.io.File
 import java.time.LocalDate
@@ -35,6 +39,74 @@ class Student : AppCompatActivity() {
         Utils.print("launching Student")
         apps = true
         init()
+        checkPermissionsWrapper()
+    }
+
+    private fun checkPermissionsWrapper() {
+        Utils.print("checking permissions")
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+            checkPermissions(
+                arrayOf(
+                    Manifest.permission.BLUETOOTH_ADVERTISE
+                )
+            )
+        } else {
+            discover()
+        }
+    }
+
+    private fun checkPermissions(permissions: Array<out String>) {
+        var flag = 0
+        for (x in permissions) {
+            if (ContextCompat.checkSelfPermission(this, x)
+                != PackageManager.PERMISSION_GRANTED
+            )
+                flag = 1
+        }
+        if (flag == 1) {
+            Utils.print("requesting permissions")
+            ActivityCompat.requestPermissions(this, permissions, 1)
+        } else {
+            discover()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                var flag = 0
+                for (x in grantResults) {
+                    if (x != PackageManager.PERMISSION_GRANTED)
+                        flag = 1
+                }
+                if (flag != 1) {
+                    discover()
+                } else {
+                    Utils.print("Permissions not granted")
+                }
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun discover() {
+        Utils.print("discover()")
+        startActivityForResult(
+            Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(
+                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
+                0
+            ), 1
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Utils.print("Discovery request : $resultCode")
     }
 
     private fun init() {
@@ -123,14 +195,16 @@ class Student : AppCompatActivity() {
                         countDownTimer =
                             object : CountDownTimer((seconds * 1000).toLong(), 1 * 1000) {
                                 override fun onTick(millisUntilFinished: Long) {
-                                    val text = "Reset in ${formatTime((millisUntilFinished/1000).toInt())}"
+                                    val text =
+                                        "Reset in ${formatTime((millisUntilFinished / 1000).toInt())}"
                                     timer_msg.text = text
                                     Utils.print(text)
                                 }
 
                                 override fun onFinish() {
                                     reset()
-                                    checkTime()
+                                    countDownTimer.cancel()
+                                    Handler().postDelayed({ checkTime() }, 1000)
                                 }
                             }
                         countDownTimer.start()
@@ -149,7 +223,7 @@ class Student : AppCompatActivity() {
         var pos = 0
         while (pos < timings.size) {
             if (time.hour > timings[pos].getInt("hr") ||
-                (time.hour == timings[pos].getInt("hr") && time.minute > timings[pos].getInt("min"))
+                (time.hour == timings[pos].getInt("hr") && time.minute >= timings[pos].getInt("min"))
             ) {
                 ++pos
             } else {
@@ -215,7 +289,7 @@ class Student : AppCompatActivity() {
                 }
             }
         }
-        Server(this,"/admin/timings", "GET", null, callback).execute()
+        Server(this, "/admin/timings", "GET", null, callback).execute()
     }
 
     private fun getCancellationSignal(): CancellationSignal {
@@ -293,19 +367,19 @@ class Student : AppCompatActivity() {
             status.put("apps", 0)
         Utils.print(status)
         json.put("status", status)
-        Server(this,"/student/status", "POST", json.toString(), callback).execute()
+        Server(this, "/student/status", "POST", json.toString(), callback).execute()
     }
 
     private fun setStatus() {
         if (authenticated) {
-            verified.text = "You are authenticated"
+            verified.setBackgroundResource(R.drawable.tick_button)
         } else {
-            verified.text = "Not authenticated"
+            verified.setBackgroundResource(R.drawable.remove_button)
         }
         if (apps) {
-            usedApps.text = "You have used other apps"
+            usedApps.setBackgroundResource(R.drawable.mobile)
         } else {
-            usedApps.text = "No other apps used"
+            usedApps.setBackgroundResource(R.drawable.tick_button)
         }
     }
 

@@ -16,6 +16,12 @@ class Admin_classAdd : DialogFragment() {
     private lateinit var className: EditText
     private lateinit var addClass: Button
     private lateinit var msg: TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Dialog)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +50,7 @@ class Admin_classAdd : DialogFragment() {
                 }
             }
         }
-        Server(requireContext(),"/admin/class/list", "GET", null, callback).execute()
+        Server(requireContext(), "/admin/class/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -77,6 +83,6 @@ class Admin_classAdd : DialogFragment() {
         }
         val json = JSONObject()
         json.put("class", className.text.toString())
-        Server(requireContext(),"/admin/class/add", "POST", json.toString(), callback).execute()
+        Server(requireContext(), "/admin/class/add", "POST", json.toString(), callback).execute()
     }
 }

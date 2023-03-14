@@ -96,7 +96,6 @@ class Teacher : AppCompatActivity() {
         Utils.print("No new requests")
     }
 
-
     private fun checkPermissionsWrapper() {
         Utils.print("checking permissions")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {

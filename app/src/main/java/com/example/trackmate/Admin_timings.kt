@@ -1,13 +1,11 @@
 package com.example.trackmate
 
-import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
@@ -15,12 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
 import org.json.JSONObject
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
-private var timings = mutableListOf<JSONObject>()
-
-private fun request(json: JSONObject,con: Context) {
+private fun request(json: JSONObject, con: Context) {
     val callback = object : HttpCallback {
         override fun onComplete(result: HttpResult?) {
             if (result != null && result.statusCode == 200) {
@@ -28,13 +22,19 @@ private fun request(json: JSONObject,con: Context) {
             }
         }
     }
-    Server(con,"/admin/timings", "POST", json.toString(), callback).execute()
+    Server(con, "/admin/timings", "POST", json.toString(), callback).execute()
 }
 
 class Admin_timings : DialogFragment() {
+    private var timings = mutableListOf<JSONObject>()
     private lateinit var fragmentView: View
     private lateinit var timePicker: TimePicker
     private lateinit var add_time: Button
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Dialog)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,8 +55,8 @@ class Admin_timings : DialogFragment() {
             override fun onComplete(result: HttpResult?) {
                 if (result?.data != null && result.statusCode == 200) {
                     val json = JSONObject(result.data)
-                    val t=json.getJSONArray("timings")
-                    for(i in 0 until t.length()){
+                    val t = json.getJSONArray("timings")
+                    for (i in 0 until t.length()) {
                         timings.add(t.getJSONObject(i))
                     }
                     Utils.print(timings)
@@ -64,7 +64,7 @@ class Admin_timings : DialogFragment() {
                 }
             }
         }
-        Server(requireContext(),"/admin/timings", "GET", null, callback).execute()
+        Server(requireContext(), "/admin/timings", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -74,7 +74,7 @@ class Admin_timings : DialogFragment() {
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.timings)
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        val adapter = AdapterTimingsList(timings,requireContext())
+        val adapter = AdapterTimingsList(timings, requireContext())
         recyclerView.adapter = adapter
         add_time.setOnClickListener {
             val time = JSONObject()
@@ -82,36 +82,39 @@ class Admin_timings : DialogFragment() {
             time.put("min", timePicker.minute)
             var pos = 0
             if (timings.size > 0) {
-                while (timings[pos].getInt("hr") < time.getInt("hr")) {
+                while (pos < timings.size && timings[pos].getInt("hr") < time.getInt("hr")) {
                     ++pos
                 }
-                while (timings[pos].getInt("min") < time.getInt("min")) {
+                while (pos < timings.size && timings[pos].getInt("min") < time.getInt("min")) {
                     if (timings[pos].getInt("hr") > time.getInt("hr"))
                         break
                     ++pos
                 }
             }
-            if (timings[pos]
+            Utils.print(pos)
+            if (pos == timings.size || timings[pos]
                     .getInt("hr") != time.getInt("hr") || timings[pos]
                     .getInt("min") != time.getInt("min")
             ) {
-                timings.add(pos,time)
+                timings.add(pos, time)
                 adapter.notifyItemInserted(pos)
                 Utils.print(timings)
                 val json = JSONObject()
                 json.put("timings", JSONArray(timings))
-                request(json,requireContext())
-            }
-            else{
+                request(json, requireContext())
+            } else {
                 Utils.print("time already exists")
             }
         }
     }
 
-    class AdapterTimingsList(private val items: MutableList<JSONObject>,private val con: Context) :
+    inner class AdapterTimingsList(
+        private val items: MutableList<JSONObject>,
+        private val con: Context
+    ) :
         RecyclerView.Adapter<AdapterTimingsList.ViewHolder>() {
 
-        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val time: TextView = view.findViewById(R.id.time)
             val remove: Button = view.findViewById(R.id.time_remove)
         }
@@ -132,7 +135,7 @@ class Admin_timings : DialogFragment() {
                 notifyItemRemoved(pos)
                 val json = JSONObject()
                 json.put("timings", JSONArray(timings))
-                request(json,con)
+                request(json, con)
             }
         }
 

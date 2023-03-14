@@ -254,7 +254,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins"
-                android:text="Enter bluetooth address from settings>About phone>Status"
+                android:text="Enter bluetooth address from Settings>About phone>Status"
                 android:textSize="10sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -267,10 +267,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="2dp"
                 android:text="Class :"
-                app:layout_constraintBottom_toTopOf="@+id/hint_t_list"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/classes_list" />
 
@@ -299,11 +297,12 @@
                 android:id="@+id/teachers_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/hint_t_list"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/hint_t_list" />
+                app:layout_constraintStart_toEndOf="@+id/hint_t_list"
+                app:layout_constraintTop_toTopOf="@+id/hint_t_list" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
 
-private var students = mutableListOf<JSONObject>()
-private lateinit var selectedClass:String
 
 class Admin_studentsList : DialogFragment() {
+private var students = mutableListOf<JSONObject>()
+private lateinit var selectedClass:String
     private lateinit var fragmentView: View
     private lateinit var classesList: Spinner
     private var classes = mutableListOf<String>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Dialog)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -109,10 +113,10 @@ class Admin_studentsList : DialogFragment() {
         Server(requireContext(),"/admin/class/view","POST",data.toString(),callback).execute()
     }
 
-    class AdapterStudentsList(private val items: MutableList<JSONObject>,private val con: Context) :
+    inner class AdapterStudentsList(private val items: MutableList<JSONObject>,private val con: Context) :
         RecyclerView.Adapter<AdapterStudentsList.ViewHolder>() {
 
-        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val name: TextView = view.findViewById(R.id.s_list_name)
             val username: TextView = view.findViewById(R.id.s_list_username)
             val remove: Button = view.findViewById(R.id.button_s_remove)

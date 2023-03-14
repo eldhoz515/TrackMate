@@ -6,4 +6,8 @@
         <item name="android:layout_height">48dp</item>
         <item name="android:background">@drawable/remove_button</item>
     </style>
+
+    <style name="Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

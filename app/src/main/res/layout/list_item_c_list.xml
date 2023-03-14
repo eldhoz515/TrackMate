@@ -9,24 +9,28 @@
     <Button
         android:id="@+id/button_c_remove"
         style="@style/remove_button"
-        android:layout_marginEnd="52dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/c_list_name"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/c_list_name"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
         android:fontFamily="@font/poppins_semibold"
         android:text="CSE 2020-24"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_c_remove"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.529" />
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,10 @@ class Address : DialogFragment() {
     private lateinit var fragmentView: View
     private lateinit var save: Button
     private lateinit var address: EditText
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Dialog)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

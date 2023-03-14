@@ -12,10 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
 
-private var teachers = mutableListOf<JSONObject>()
 
 class Admin_teachersList : DialogFragment() {
+    private var teachers = mutableListOf<JSONObject>()
     private lateinit var fragmentView: View
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.Dialog)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,10 +65,10 @@ class Admin_teachersList : DialogFragment() {
         recyclerView.adapter = adapter
     }
 
-    class AdapterTeachersList(private val items: MutableList<JSONObject>,private val con: Context) :
+    inner class AdapterTeachersList(private val items: MutableList<JSONObject>,private val con: Context) :
         RecyclerView.Adapter<AdapterTeachersList.ViewHolder>() {
 
-        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val username: TextView = view.findViewById(R.id.t_list_username)
             val name: TextView = view.findViewById(R.id.t_list_name)
             val remove: Button = view.findViewById(R.id.t_remove)

@@ -12,7 +12,7 @@ class Admin : AppCompatActivity() {
         setContentView(R.layout.admin)
         Utils.print("launching Admin")
         setUI()
-        checkRequests()
+//        checkRequests()
     }
 
     private fun setUI() {
@@ -31,10 +31,10 @@ class Admin : AppCompatActivity() {
             addClass()
         }
         findViewById<Button>(R.id.s_req_notifier).setOnClickListener {
-            manageTeachers()
+            notifications()
         }
         findViewById<Button>(R.id.button_s_list).setOnClickListener {
-            notifications()
+            manageTeachers()
         }
         findViewById<Button>(R.id.admin_view_students).setOnClickListener {
             manageStudents()
@@ -70,11 +70,8 @@ class Admin : AppCompatActivity() {
 
     private fun manageTeachers() {
         Utils.print("manageTeachers()")
-        val tListButton = findViewById<Button>(R.id.s_req_notifier)
-        tListButton.setOnClickListener {
-            val teacherListFragment = Admin_teachersList()
-            teacherListFragment.show(supportFragmentManager, "Admin_teachersList")
-        }
+        val teacherListFragment = Admin_teachersList()
+        teacherListFragment.show(supportFragmentManager, "Admin_teachersList")
     }
 
     private fun notifications() {
