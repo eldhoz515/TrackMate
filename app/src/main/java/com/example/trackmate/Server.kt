@@ -33,7 +33,7 @@ class Server(
             val address = if (json != null) {
                 json.getString("address")
             } else {
-                "192.168.1.5"
+                "192.168.252.30"
             }
             val root = "http://${address}:8888"
             Utils.print("$root$url")

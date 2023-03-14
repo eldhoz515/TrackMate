@@ -28,7 +28,7 @@ class Teacher_attendance : DialogFragment() {
     private lateinit var save: Button
     private lateinit var retry: Button
     private lateinit var recyclerView: RecyclerView
-    private lateinit var group:Group
+    private lateinit var group: Group
     private lateinit var adapter: Teacher_attendance.AdapterAttendanceList
 
     private var classes = mutableListOf<String>()
@@ -66,7 +66,7 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server(requireContext(),"/teacher/class/list", "GET", null, callback).execute()
+        Server(requireContext(), "/teacher/class/list", "GET", null, callback).execute()
     }
 
     private fun setUI() {
@@ -74,7 +74,8 @@ class Teacher_attendance : DialogFragment() {
         classesList = fragmentView.findViewById(R.id.t_a_c_list)
         save = fragmentView.findViewById(R.id.mark_attendance)
         retry = fragmentView.findViewById(R.id.check_attendance)
-        group.visibility=View.VISIBLE
+        group = fragmentView.findViewById(R.id.attendance_grp)
+        group.visibility = View.VISIBLE
         save.setOnClickListener {
             markAttendance()
         }
@@ -135,12 +136,12 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server(requireContext(),"/teacher/class/view", "POST", data.toString(), callback).execute()
+        Server(requireContext(), "/teacher/class/view", "POST", data.toString(), callback).execute()
     }
 
     private fun getAttendance() {
         Utils.print("getAttendance()")
-        group.visibility=View.GONE
+        group.visibility = View.GONE
         Utils.print(studentsList)
         val t = studentsList.size
         studentsList = mutableListOf()
@@ -182,13 +183,14 @@ class Teacher_attendance : DialogFragment() {
         bluetoothAdapter.startDiscovery()
     }
 
-    private fun deviceFound(name: String, address: String) {
-        Utils.print("Device found: $name ($address)")
-        if (students.has(address)) {
-            val student = students.getJSONObject(address)
+    private fun deviceFound(name: String?, address: String) {
+        val addr = address.lowercase()
+        Utils.print("Device found: $name ($addr)")
+        if (students.has(addr)) {
+            val student = students.getJSONObject(addr)
             Utils.print("${student.get("username")} is nearby")
             student.put("attendance", 1)
-            students.put(address, student)
+            students.put(addr, student)
         } else {
             Utils.print("address not found")
         }
@@ -207,14 +209,17 @@ class Teacher_attendance : DialogFragment() {
             }
         }
         Utils.print(studentsList)
-        adapter = AdapterAttendanceList(studentsList,requireContext())
+        adapter = AdapterAttendanceList(studentsList, requireContext())
         recyclerView.adapter = adapter
         recyclerView.visibility = View.VISIBLE
         save.visibility = View.VISIBLE
         retry.visibility = View.VISIBLE
     }
 
-    class AdapterAttendanceList(private val items: MutableList<JSONObject>,private val con: Context) :
+    class AdapterAttendanceList(
+        private val items: MutableList<JSONObject>,
+        private val con: Context
+    ) :
         RecyclerView.Adapter<AdapterAttendanceList.ViewHolder>() {
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -280,6 +285,6 @@ class Teacher_attendance : DialogFragment() {
                 }
             }
         }
-        Server(requireContext(),"/teacher/attendance", "POST", json.toString(), callback).execute()
+        Server(requireContext(), "/teacher/attendance", "POST", json.toString(), callback).execute()
     }
 }
