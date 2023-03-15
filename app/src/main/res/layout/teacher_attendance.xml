@@ -26,6 +26,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <View
+                    android:id="@+id/loading_t_a"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/anim"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5" />
+
                 <TextView
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
@@ -79,7 +92,6 @@
                     android:id="@+id/attendance_grp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     app:constraint_referenced_ids="check_attendance,mark_attendance,textView17,textView20"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

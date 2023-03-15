@@ -28,6 +28,7 @@ class Teacher_attendance : DialogFragment() {
     private lateinit var save: Button
     private lateinit var retry: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var loading:View
     private lateinit var group: Group
     private lateinit var adapter: Teacher_attendance.AdapterAttendanceList
 
@@ -78,11 +79,13 @@ class Teacher_attendance : DialogFragment() {
         save = fragmentView.findViewById(R.id.mark_attendance)
         retry = fragmentView.findViewById(R.id.check_attendance)
         group = fragmentView.findViewById(R.id.attendance_grp)
+        loading=fragmentView.findViewById(R.id.loading_t_a)
         group.visibility = View.VISIBLE
         save.setOnClickListener {
             markAttendance()
         }
         retry.setOnClickListener {
+            Utils.start(loading)
             getAttendance()
         }
         recyclerView = fragmentView.findViewById(R.id.t_a_list_list)
@@ -129,9 +132,7 @@ class Teacher_attendance : DialogFragment() {
                         )
                     }
                     Utils.print(students)
-                    if (students.length() > 0) {
-                        getAttendance()
-                    } else {
+                    if (students.length() == 0){
                         Utils.print("No students in this class")
                         val msg = fragmentView.findViewById<TextView>(R.id.t_a_msg)
                         msg.visibility = View.VISIBLE
@@ -146,7 +147,6 @@ class Teacher_attendance : DialogFragment() {
         Utils.print("getAttendance()")
         group.visibility = View.GONE
         Utils.print(studentsList)
-        val t = studentsList.size
         studentsList = mutableListOf()
         recyclerView.visibility = View.INVISIBLE
         discoverDevices()
@@ -201,6 +201,7 @@ class Teacher_attendance : DialogFragment() {
 
     private fun displayAttendance() {
         Utils.print("displayAttendance()")
+        Utils.end(loading)
         Utils.print(students)
         studentsList = mutableListOf()
         for (address in students.keys()) {
@@ -243,24 +244,24 @@ class Teacher_attendance : DialogFragment() {
             if (item.has("status")) {
 
                 if (item.getJSONObject("status").getInt("apps") == 1) {
-                    holder.apps.text = "used"
+                    holder.apps.setBackgroundResource(R.drawable.mobile)
                 } else {
-                    holder.apps.text = "didn't use"
+                    holder.apps.setBackgroundResource(R.drawable.tick_button)
                 }
             } else {
-                holder.apps.text = "used"
+                holder.apps.setBackgroundResource(R.drawable.mobile)
             }
             if (item.has("attendance")) {
                 if (item.has("status")) {
                     if (item.getJSONObject("status").getInt("auth") == 1)
-                        holder.attendance.text = "present"
+                        holder.apps.setBackgroundResource(R.drawable.tick_button)
                     else
-                        holder.attendance.text = "not sure"
+                        holder.apps.setBackgroundResource(R.drawable.question_mark)
                 } else {
-                    holder.attendance.text = "not sure"
+                    holder.apps.setBackgroundResource(R.drawable.question_mark)
                 }
             } else {
-                holder.attendance.text = "absent"
+                holder.apps.setBackgroundResource(R.drawable.remove_button)
             }
         }
 
@@ -289,5 +290,6 @@ class Teacher_attendance : DialogFragment() {
             }
         }
         Server(requireContext(), "/teacher/attendance", "POST", json.toString(), callback).execute()
+        this.dismiss()
     }
 }
