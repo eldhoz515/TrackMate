@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:gravity="center" android:width="10000dp" android:height="10000dp" android:drawable="@drawable/black"/>
-    <item android:width="130dp" android:height="100dp" android:gravity="center_horizontal" android:top="150dp" android:drawable="@drawable/logo" />
-    <item android:width="330dp" android:height="50dp" android:gravity="center_horizontal" android:top="350dp" android:drawable="@drawable/logo_text"/>
+    <item android:width="70dp" android:height="52dp" android:gravity="center_horizontal" android:top="150dp" android:drawable="@drawable/logo" />
+    <item android:width="270dp" android:height="40dp" android:gravity="center_horizontal" android:top="350dp" android:drawable="@drawable/logo_text"/>
 </layer-list>

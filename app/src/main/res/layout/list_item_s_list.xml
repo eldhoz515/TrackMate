@@ -13,19 +13,21 @@
         android:fontFamily="@font/poppins_semibold"
         android:text="Arun Menon"
         android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_s_remove"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/s_list_username"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_s_remove"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/remove_button"
+        android:backgroundTint="@color/orange"
+        android:textColor="#EC0404"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -40,6 +42,7 @@
         android:fontFamily="@font/poppins"
         android:text="arun127"
         android:textAlignment="center"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/s_list_name"
         app:layout_constraintHorizontal_bias="0.5"

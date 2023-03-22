@@ -23,6 +23,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="6dp"
             android:background="@drawable/signup"
+            android:backgroundTint="@color/orange"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,6 +34,7 @@
             android:layout_marginStart="2dp"
             android:fontFamily="@font/poppins"
             android:text="Signup"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup" />
@@ -44,6 +46,7 @@
             android:layout_marginStart="42dp"
             android:alpha="0.2"
             android:background="@drawable/login"
+            android:backgroundTint="@color/orange"
             app:layout_constraintStart_toEndOf="@+id/signup"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,6 +57,7 @@
             android:layout_marginStart="8dp"
             android:fontFamily="@font/poppins"
             android:text="Login"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.807"
@@ -77,6 +81,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:text="Admin"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/frameLayout3"
             app:layout_constraintStart_toEndOf="@+id/frameLayout"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
@@ -87,6 +92,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:text="Student"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/frameLayout"
             app:layout_constraintStart_toStartOf="@+id/frameLayout"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
@@ -97,6 +103,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:text="Teacher"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/frameLayout3"
             app:layout_constraintStart_toStartOf="@+id/frameLayout3"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout3" />
@@ -120,7 +127,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.2"
-                android:background="@drawable/administrator"
+                android:background="@drawable/admin"
+                android:backgroundTint="@color/orange"
                 android:tag="admin" />
         </FrameLayout>
 
@@ -145,7 +153,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.2"
-                android:background="@drawable/teaching"
+                android:background="@drawable/teacher"
+                android:backgroundTint="@color/orange"
                 android:tag="teacher" />
         </FrameLayout>
 
@@ -167,9 +176,8 @@
                 android:id="@+id/student"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/student_reading"
-                android:backgroundTint="#00656262"
-                android:backgroundTintMode="add"
+                android:background="@drawable/student"
+                android:backgroundTint="@color/orange"
                 android:outlineProvider="none"
                 android:tag="student" />
         </FrameLayout>
@@ -198,6 +206,8 @@
                 android:fontFamily="@font/poppins"
                 android:hint="Username"
                 android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -212,6 +222,8 @@
                 android:fontFamily="@font/poppins"
                 android:hint="Name"
                 android:inputType="textPersonName"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="20sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -227,6 +239,8 @@
                 android:fontFamily="@font/poppins"
                 android:hint="Password"
                 android:inputType="textPassword"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -241,6 +255,8 @@
                 android:fontFamily="@font/poppins"
                 android:hint="Bluetooth address"
                 android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="20sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -255,6 +271,8 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins"
                 android:text="Enter bluetooth address from Settings>About phone>Status"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textSize="10sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -269,8 +287,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="2dp"
                 android:text="Class :"
+                android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/classes_list" />
+                app:layout_constraintTop_toTopOf="@+id/classes_list"
+                android:textColorHint="@color/white" />
 
             <Spinner
                 android:id="@+id/classes_list"
@@ -290,6 +310,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="140dp"
                 android:text="Teacher :"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/password" />
 
@@ -312,6 +334,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/go"
+        android:backgroundTint="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

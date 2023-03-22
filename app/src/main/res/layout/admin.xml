@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,10 @@
 
             <View
                 android:id="@+id/view"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/anim"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +39,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/poppins_medium_italic"
                 android:text="username"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -81,6 +83,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Manage Teachers"
+                        android:textColor="@color/white"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -92,6 +95,7 @@
                         android:layout_marginStart="64dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/requests"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintStart_toEndOf="@+id/button_s_list"
                         app:layout_constraintTop_toBottomOf="@+id/textView121" />
 
@@ -102,6 +106,7 @@
                         android:layout_marginStart="16dp"
                         android:fontFamily="@font/poppins"
                         android:text="View Teachers"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/button_s_list" />
@@ -113,6 +118,7 @@
                         android:layout_marginStart="38dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/list1"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView121" />
 
@@ -123,6 +129,7 @@
                         android:layout_marginStart="32dp"
                         android:fontFamily="@font/poppins"
                         android:text="Requests"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintStart_toEndOf="@+id/textView131"
                         app:layout_constraintTop_toBottomOf="@+id/s_req_notifier" />
@@ -151,6 +158,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Manage Students"
+                        android:textColor="@color/white"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -162,6 +170,7 @@
                         android:layout_marginStart="50dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/attendance"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -172,6 +181,7 @@
                         android:layout_marginStart="16dp"
                         android:fontFamily="@font/poppins"
                         android:text="View Attendance"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/student_attendance" />
@@ -183,6 +193,7 @@
                         android:layout_marginStart="90dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/list"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintStart_toEndOf="@+id/student_attendance"
                         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -193,6 +204,7 @@
                         android:layout_marginStart="32dp"
                         android:fontFamily="@font/poppins"
                         android:text="View Students"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintStart_toEndOf="@+id/textView18"
                         app:layout_constraintTop_toBottomOf="@+id/admin_view_students" />
@@ -220,6 +232,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Manage Timings"
+                        android:textColor="@color/white"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -231,6 +244,7 @@
                         android:layout_marginStart="65dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/time"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
@@ -258,6 +272,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Manage Classes"
+                        android:textColor="@color/white"
                         android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -269,6 +284,7 @@
                         android:layout_marginStart="62dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/add"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintStart_toEndOf="@+id/admin_view_classes"
                         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -279,6 +295,7 @@
                         android:layout_marginStart="16dp"
                         android:fontFamily="@font/poppins"
                         android:text="View Classes"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/admin_view_classes" />
@@ -290,6 +307,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/list"
+                        android:backgroundTint="@color/orange"
                         app:layout_constraintBottom_toTopOf="@+id/textView10"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView9"
@@ -302,6 +320,7 @@
                         android:layout_marginStart="32dp"
                         android:fontFamily="@font/poppins"
                         android:text="Add Class"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
                         app:layout_constraintStart_toEndOf="@+id/textView10"
                         app:layout_constraintTop_toBottomOf="@+id/admin_add_class" />

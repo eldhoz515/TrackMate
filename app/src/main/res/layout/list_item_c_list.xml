@@ -9,6 +9,7 @@
     <Button
         android:id="@+id/button_c_remove"
         style="@style/remove_button"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

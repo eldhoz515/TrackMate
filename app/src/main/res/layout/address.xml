@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/teal_200">
 
     <FrameLayout
         android:layout_width="286dp"
@@ -41,6 +42,7 @@
                 android:layout_marginTop="24dp"
                 android:inputType="textUri"
                 android:text="192.168.1.5"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,6 +54,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/go"
+                android:backgroundTint="@color/orange"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

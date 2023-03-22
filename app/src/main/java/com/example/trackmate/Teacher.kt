@@ -24,7 +24,6 @@ class Teacher : AppCompatActivity() {
         setContentView(R.layout.teacher)
         Utils.print("launching Teacher")
         setUI()
-        checkRequests()
     }
 
     private fun setUI() {
@@ -56,8 +55,15 @@ class Teacher : AppCompatActivity() {
 
     private fun notifications() {
         Utils.print("notifications()")
-        val teacherReqFragment = Teacher_studentRequests.newInstance(teacherName)
-        teacherReqFragment.show(supportFragmentManager, "Teacher_studentRequests")
+        val file = readFile("creds.json")
+        if (file != null) {
+            teacherName = file.get("username").toString()
+            val teacherReqFragment = Teacher_studentRequests.newInstance(teacherName)
+            teacherReqFragment.show(supportFragmentManager, "Teacher_studentRequests")
+        }
+        else{
+            Utils.print("Couldn't get teacher name")
+        }
     }
 
     private fun checkRequests() {

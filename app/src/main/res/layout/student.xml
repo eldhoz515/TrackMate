@@ -9,7 +9,7 @@
     <FrameLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +21,8 @@
 
             <View
                 android:id="@+id/view"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/anim"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/poppins_medium_italic"
                 android:text="username"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -48,6 +49,7 @@
         android:layout_marginTop="48dp"
         android:fontFamily="@font/poppins_semibold"
         android:text="Reset in 00:00:00"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -60,6 +62,7 @@
         android:layout_height="150dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/go"
+        android:backgroundTint="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +74,7 @@
         android:layout_height="100dp"
         android:layout_marginBottom="120dp"
         android:background="@drawable/tick_button"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toTopOf="@+id/frameLayout4"
         app:layout_constraintEnd_toStartOf="@+id/used_apps"
         app:layout_constraintHorizontal_bias="0.5"
@@ -82,6 +86,7 @@
         android:layout_height="100dp"
         android:layout_marginBottom="120dp"
         android:background="@drawable/mobile"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toTopOf="@+id/frameLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -111,6 +116,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="View Attendance"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -121,6 +127,7 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/attendance"
+                android:backgroundTint="@color/orange"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

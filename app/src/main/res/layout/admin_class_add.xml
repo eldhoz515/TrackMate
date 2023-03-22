@@ -34,7 +34,8 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="5dp" />
 
             <Button
                 android:id="@+id/add_class"
@@ -42,6 +43,7 @@
                 android:layout_height="48dp"
                 android:layout_marginBottom="6dp"
                 android:background="@drawable/go"
+                android:backgroundTint="@color/orange"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

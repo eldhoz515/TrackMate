@@ -352,10 +352,10 @@ class Student : AppCompatActivity() {
         }
         val json = JSONObject()
         val status = JSONObject()
-        json.put("username", "arun")
-        json.put("class", "cse")
-//        json.put("username",creds.getString("username"))
-//        json.put("class",creds.getString("class"))
+//        json.put("username", "arun")
+//        json.put("class", "cse")
+        json.put("username",creds.getString("username"))
+        json.put("class",creds.getString("class"))
 //        Todo
         if (authenticated)
             status.put("auth", 1)
