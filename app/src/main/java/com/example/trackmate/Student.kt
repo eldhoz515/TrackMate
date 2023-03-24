@@ -244,10 +244,24 @@ class Student : AppCompatActivity() {
         usedApps = findViewById(R.id.used_apps)
         verified = findViewById(R.id.verified)
         findViewById<Button>(R.id.student_attendance).setOnClickListener {
-            //todo
+            showAttendance()
         }
         verify.setOnClickListener {
             authenticate()
+        }
+    }
+
+    private fun showAttendance() {
+        Utils.print("showAttendance()")
+        val file = readFile("creds.json")
+        if (file != null) {
+            val data = JSONObject()
+            data.put("class", file.get("class").toString())
+            data.put("username", file.get("username").toString())
+            val sAttFragment = Student_Attendance.newInstance(data)
+            sAttFragment.show(supportFragmentManager, "Student_Attendance")
+        } else {
+            Utils.print("Couldn't get student details")
         }
     }
 
@@ -354,8 +368,8 @@ class Student : AppCompatActivity() {
         val status = JSONObject()
 //        json.put("username", "arun")
 //        json.put("class", "cse")
-        json.put("username",creds.getString("username"))
-        json.put("class",creds.getString("class"))
+        json.put("username", creds.getString("username"))
+        json.put("class", creds.getString("class"))
 //        Todo
         if (authenticated)
             status.put("auth", 1)
