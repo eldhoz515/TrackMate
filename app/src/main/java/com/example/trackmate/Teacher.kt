@@ -33,7 +33,7 @@ class Teacher : AppCompatActivity() {
             findViewById<TextView>(R.id.teacher_username).text = json.getString("username")
         }
         findViewById<Button>(R.id.student_attendance).setOnClickListener {
-            //todo
+            viewAttendance()
         }
         findViewById<Button>(R.id.teacher_check_a).setOnClickListener {
             findViewById<TextView>(R.id.t_error).visibility = View.GONE
@@ -45,6 +45,12 @@ class Teacher : AppCompatActivity() {
         findViewById<Button>(R.id.s_req_notifier).setOnClickListener {
             notifications()
         }
+    }
+
+    private fun viewAttendance(){
+        Utils.print("getAttendance()")
+        val studentListFragment = Attendance()
+        studentListFragment.show(supportFragmentManager, "Attendance")
     }
 
     private fun manageStudents() {

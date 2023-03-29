@@ -40,10 +40,15 @@ class Admin : AppCompatActivity() {
             manageStudents()
         }
         findViewById<Button>(R.id.student_attendance).setOnClickListener {
-            //todo
+            viewAttendance()
         }
     }
 
+    private fun viewAttendance(){
+        Utils.print("getAttendance()")
+        val studentListFragment = Attendance()
+        studentListFragment.show(supportFragmentManager, "Attendance")
+    }
     private fun manageTimings() {
         Utils.print("manageTimings()")
         val studentListFragment = Admin_timings()
