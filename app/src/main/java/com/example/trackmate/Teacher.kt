@@ -88,9 +88,6 @@ class Teacher : AppCompatActivity() {
             }
         }
         val file = readFile("creds.json")
-//        val file=JSONObject()
-//        file.put("username","arun")
-        //Todo
 
         if (file != null) {
             val data = JSONObject()
@@ -112,19 +109,19 @@ class Teacher : AppCompatActivity() {
         Utils.print("checking permissions")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
             checkPermissions(
-                arrayOf(
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.BLUETOOTH_CONNECT,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
+                    arrayOf(
+                            Manifest.permission.BLUETOOTH_SCAN,
+                            Manifest.permission.BLUETOOTH_CONNECT,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
             )
         } else {
             checkPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
+                    arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
             )
         }
     }
@@ -133,7 +130,7 @@ class Teacher : AppCompatActivity() {
         var flag = 0
         for (x in permissions) {
             if (ContextCompat.checkSelfPermission(this, x)
-                != PackageManager.PERMISSION_GRANTED
+                    != PackageManager.PERMISSION_GRANTED
             )
                 flag = 1
         }
@@ -146,9 +143,9 @@ class Teacher : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -173,8 +170,8 @@ class Teacher : AppCompatActivity() {
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (bluetoothAdapter.isEnabled && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-            ))
+                        LocationManager.NETWORK_PROVIDER
+                ))
         )
             getAttendance()
         else {

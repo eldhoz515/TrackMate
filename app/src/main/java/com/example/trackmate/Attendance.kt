@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.math.roundToInt
 
 class Attendance : DialogFragment() {
     private var students = mutableListOf<JSONObject>()
@@ -74,7 +75,11 @@ class Attendance : DialogFragment() {
                 Utils.print("class selected")
                 val item = parent.getItemAtPosition(position).toString()
                 selectedClass=item
+                val msg = fragmentView.findViewById<TextView>(R.id.a_no_students)
+                msg.visibility = View.GONE
                 students= mutableListOf()
+                val attList=fragmentView.findViewById<RecyclerView>(R.id.a_list_list)
+                attList.visibility=View.GONE
                 getStudents(item)
             }
 
@@ -100,6 +105,7 @@ class Attendance : DialogFragment() {
                     if(students.size >0){
                         Utils.print("setting up students list")
                         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.a_list_list)
+                        recyclerView.visibility=View.VISIBLE
                         val layoutManager = LinearLayoutManager(context)
                         recyclerView.layoutManager = layoutManager
                         val adapter = AdapterReportingList(students,requireContext())
@@ -139,7 +145,7 @@ class Attendance : DialogFragment() {
                 if (stuAtt.getInt(i) == 0)
                     ab += 1
             }
-            holder.percentage.text="${((stuAtt.length() - ab).toDouble() / stuAtt.length()) * 100}"
+            holder.percentage.text="${(((stuAtt.length() - ab).toDouble() / stuAtt.length()) * 100).roundToInt()}%"
         }
 
         override fun getItemCount() = items.size

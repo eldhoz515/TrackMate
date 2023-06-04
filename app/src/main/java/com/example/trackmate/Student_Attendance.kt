@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.math.roundToInt
 
 class Student_Attendance : DialogFragment() {
     private lateinit var className: String
@@ -40,8 +41,7 @@ class Student_Attendance : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(R.layout.student_attendance, container, false)
         return fragmentView
@@ -66,9 +66,9 @@ class Student_Attendance : DialogFragment() {
                     Utils.print(classAttendance)
                     if (classAttendance.has(studentName)) {
                         stuAtt = classAttendance.getJSONArray(studentName)
+                        Utils.print(stuAtt)
                         for (i in (0 until stuAtt.length()).reversed()) {
-                            if (i > 4)
-                                break
+                            if (attendance.size > 4) break
                             attendance.add(stuAtt.getInt(i))
                         }
                         setUI()
@@ -78,7 +78,7 @@ class Student_Attendance : DialogFragment() {
                 }
             }
         }
-        Server(requireContext(), "/student/attendance", "GET", data.toString(), callback).execute()
+        Server(requireContext(), "/student/attendance", "POST", data.toString(), callback).execute()
     }
 
     private fun setUI() {
@@ -89,26 +89,24 @@ class Student_Attendance : DialogFragment() {
         percentage = fragmentView.findViewById(R.id.s_a_percentage)
         var ab = 0;
         for (i in 0 until stuAtt.length()) {
-            if (stuAtt.getInt(i) == 0)
-                ab += 1
+            if (stuAtt.getInt(i) == 0) ab += 1
         }
         total.text = "Total Sessions : ${stuAtt.length()}"
         present.text = "Present : ${stuAtt.length() - ab}"
         absent.text = "Absent : ${ab}"
         percentage.text =
-            "Percentage : ${((stuAtt.length() - ab).toDouble() / stuAtt.length()) * 100}"
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_req_list)
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+            "Percentage : ${(((stuAtt.length() - ab).toDouble() / stuAtt.length()) * 100).roundToInt()}%"
+        Utils.print(attendance)
+        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_a_recent)
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
         val adapter = AdapterStudentAttendance(attendance, requireContext())
         recyclerView.adapter = adapter
     }
 
     inner class AdapterStudentAttendance(
-        private val items: MutableList<Int>,
-        private val con: Context
-    ) :
-        RecyclerView.Adapter<AdapterStudentAttendance.ViewHolder>() {
+        private val items: MutableList<Int>, private val con: Context
+    ) : RecyclerView.Adapter<AdapterStudentAttendance.ViewHolder>() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val item: TextView = view.findViewById(R.id.s_a_recent_item)
@@ -122,10 +120,8 @@ class Student_Attendance : DialogFragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = items[position]
-            if (item == 1)
-                holder.item.setBackgroundResource(R.drawable.tick_button)
-            else
-                holder.item.setBackgroundResource(R.drawable.remove_button)
+            if (item == 1) holder.item.setBackgroundResource(R.drawable.tick_button)
+            else holder.item.setBackgroundResource(R.drawable.remove_button)
         }
 
         override fun getItemCount() = items.size

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +29,9 @@ class Teacher_attendance : DialogFragment() {
     private lateinit var save: Button
     private lateinit var retry: Button
     private lateinit var recyclerView: RecyclerView
-    private lateinit var loading:View
+    private lateinit var loading: View
     private lateinit var group: Group
+    private lateinit var header: Group
     private lateinit var adapter: Teacher_attendance.AdapterAttendanceList
 
     private var classes = mutableListOf<String>()
@@ -37,6 +39,7 @@ class Teacher_attendance : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.Dialog)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,7 +82,8 @@ class Teacher_attendance : DialogFragment() {
         save = fragmentView.findViewById(R.id.mark_attendance)
         retry = fragmentView.findViewById(R.id.check_attendance)
         group = fragmentView.findViewById(R.id.attendance_grp)
-        loading=fragmentView.findViewById(R.id.loading_t_a)
+        loading = fragmentView.findViewById(R.id.loading_t_a)
+        header = fragmentView.findViewById(R.id.a_list_header)
         group.visibility = View.VISIBLE
         save.setOnClickListener {
             markAttendance()
@@ -110,6 +114,11 @@ class Teacher_attendance : DialogFragment() {
                 val item = parent.getItemAtPosition(position).toString()
                 selectedClass = item
                 students = JSONObject()
+                header.visibility = View.GONE
+                group.visibility = View.GONE
+                recyclerView.visibility = View.GONE
+                val msg = fragmentView.findViewById<TextView>(R.id.t_a_msg)
+                msg.visibility = View.GONE
                 getStudents(item)
             }
 
@@ -132,10 +141,12 @@ class Teacher_attendance : DialogFragment() {
                         )
                     }
                     Utils.print(students)
-                    if (students.length() == 0){
+                    if (students.length() == 0) {
                         Utils.print("No students in this class")
                         val msg = fragmentView.findViewById<TextView>(R.id.t_a_msg)
                         msg.visibility = View.VISIBLE
+                    } else {
+                        group.visibility = View.VISIBLE
                     }
                 }
             }
@@ -148,6 +159,7 @@ class Teacher_attendance : DialogFragment() {
         group.visibility = View.GONE
         Utils.print(studentsList)
         studentsList = mutableListOf()
+        header.visibility = View.INVISIBLE
         recyclerView.visibility = View.INVISIBLE
         discoverDevices()
     }
@@ -169,6 +181,9 @@ class Teacher_attendance : DialogFragment() {
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                         Utils.print("discovery started")
+                        Handler().postDelayed({
+                            bluetoothAdapter.cancelDiscovery()
+                        }, 5000)
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                         Utils.print("discovery stopped")
@@ -213,11 +228,15 @@ class Teacher_attendance : DialogFragment() {
             }
         }
         Utils.print(studentsList)
-        adapter = AdapterAttendanceList(studentsList, requireContext())
-        recyclerView.adapter = adapter
-        recyclerView.visibility = View.VISIBLE
-        save.visibility = View.VISIBLE
-        retry.visibility = View.VISIBLE
+        try {
+            adapter = AdapterAttendanceList(studentsList, requireContext())
+            recyclerView.adapter = adapter
+            recyclerView.visibility = View.VISIBLE
+            group.visibility = View.VISIBLE
+            header.visibility = View.VISIBLE
+        } catch (_: Exception) {
+
+        }
     }
 
     class AdapterAttendanceList(

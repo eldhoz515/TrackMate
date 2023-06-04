@@ -53,7 +53,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/s_req_list"
-                android:layout_width="255dp"
+                android:layout_width="295dp"
                 android:layout_height="239dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

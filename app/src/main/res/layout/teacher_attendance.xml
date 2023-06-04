@@ -35,9 +35,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView13"
@@ -69,26 +67,26 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.5" />
 
+                <Spinner
+                    android:id="@+id/t_a_c_list"
+                    android:layout_width="182dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toEndOf="@+id/textView14"
+                    app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
                 <TextView
                     android:id="@+id/textView14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/poppins_medium_italic"
                     android:text="Class :"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-                <Spinner
-                    android:id="@+id/t_a_c_list"
-                    android:layout_width="182dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toEndOf="@+id/textView14"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
                 <androidx.constraintlayout.widget.Group
@@ -113,6 +111,19 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
                 <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Check"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toStartOf="@+id/textView17"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/check_attendance" />
+
+                <TextView
                     android:id="@+id/textView17"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -127,17 +138,36 @@
                     app:layout_constraintTop_toBottomOf="@+id/mark_attendance" />
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/textView25"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="Check"
+                    android:text="Present"
                     android:textColor="@color/white"
-                    app:layout_constraintEnd_toStartOf="@+id/textView17"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/check_attendance" />
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toTopOf="@+id/t_a_list_list"
+                    app:layout_constraintEnd_toStartOf="@+id/textView29" />
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Used Mobile"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView25"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/a_list_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="textView29,textView25" />
 
                 <Button
                     android:id="@+id/mark_attendance"
@@ -156,7 +186,7 @@
                     android:id="@+id/t_a_list_list"
                     android:layout_width="275dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="132dp"
+                    android:layout_marginTop="140dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"

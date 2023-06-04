@@ -13,20 +13,27 @@ import org.json.JSONObject
 
 
 class Admin_studentsList : DialogFragment() {
-private var students = mutableListOf<JSONObject>()
-private lateinit var selectedClass:String
+    private var students = mutableListOf<JSONObject>()
+    private lateinit var selectedClass: String
     private lateinit var fragmentView: View
     private lateinit var classesList: Spinner
     private var classes = mutableListOf<String>()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var msg: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.Dialog)
     }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         fragmentView = inflater.inflate(R.layout.admin_student_list, container, false)
+        recyclerView = fragmentView.findViewById(R.id.s_list_list)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+        msg = fragmentView.findViewById<TextView>(R.id.text_no_student)
         return fragmentView
     }
 
@@ -55,26 +62,28 @@ private lateinit var selectedClass:String
                 }
             }
         }
-        Server(requireContext(),"/admin/class/list", "GET", null, callback).execute()
+        Server(requireContext(), "/admin/class/list", "GET", null, callback).execute()
     }
 
     private fun setupSpinner() {
         Utils.print("setupSpinner()")
-        classesList=fragmentView.findViewById(R.id.s_c_list)
+        classesList = fragmentView.findViewById(R.id.s_c_list)
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, classes)
+                ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, classes)
         classesList.adapter = adapter
         classesList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
             ) {
                 Utils.print("class selected")
                 val item = parent.getItemAtPosition(position).toString()
-                selectedClass=item
-                students= mutableListOf()
+                selectedClass = item
+                students = mutableListOf()
+                msg.visibility=View.GONE
+                recyclerView.visibility = View.GONE
                 getStudents(item)
             }
 
@@ -85,36 +94,35 @@ private lateinit var selectedClass:String
     }
 
     private fun getStudents(className: String) {
-        val data=JSONObject()
-        data.put("class",className)
-        val callback=object :HttpCallback{
+        val data = JSONObject()
+        data.put("class", className)
+        val callback = object : HttpCallback {
             override fun onComplete(result: HttpResult?) {
-                if(result?.data!=null && result.statusCode==200){
-                    val json=JSONObject(result.data)
-                    for(student in json.keys()){
+                if (result?.data != null && result.statusCode == 200) {
+                    val json = JSONObject(result.data)
+                    for (student in json.keys()) {
                         students.add(json.getJSONObject(student))
                     }
-                    if(students.size>0){
+                    if (students.size > 0) {
                         Utils.print("setting up students list")
-                        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.s_list_list)
-                        val layoutManager = LinearLayoutManager(context)
-                        recyclerView.layoutManager = layoutManager
-                        val adapter = AdapterStudentsList(students,requireContext())
+                        val adapter = AdapterStudentsList(students, requireContext())
                         recyclerView.adapter = adapter
-                    }
-                    else{
+                        recyclerView.visibility = View.VISIBLE
+                    } else {
                         Utils.print("No students in this class")
-                        val msg = fragmentView.findViewById<TextView>(R.id.text_no_student)
                         msg.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        Server(requireContext(),"/admin/class/view","POST",data.toString(),callback).execute()
+        Server(requireContext(), "/admin/class/view", "POST", data.toString(), callback).execute()
     }
 
-    inner class AdapterStudentsList(private val items: MutableList<JSONObject>,private val con: Context) :
-        RecyclerView.Adapter<AdapterStudentsList.ViewHolder>() {
+    inner class AdapterStudentsList(
+            private val items: MutableList<JSONObject>,
+            private val con: Context
+    ) :
+            RecyclerView.Adapter<AdapterStudentsList.ViewHolder>() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val name: TextView = view.findViewById(R.id.s_list_name)
@@ -124,7 +132,7 @@ private lateinit var selectedClass:String
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item_s_list, parent, false)
+                    .inflate(R.layout.list_item_s_list, parent, false)
             return ViewHolder(view)
         }
 
@@ -146,7 +154,7 @@ private lateinit var selectedClass:String
                         }
                     }
                 }
-                Server(con,"/admin/student/remove", "POST", json.toString(), callback).execute()
+                Server(con, "/admin/student/remove", "POST", json.toString(), callback).execute()
                 students.removeAt(pos)
                 notifyItemRemoved(pos)
             }

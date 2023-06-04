@@ -31,6 +31,8 @@ class Student : AppCompatActivity() {
     private lateinit var timer_msg: TextView
     private lateinit var verified: TextView
     private lateinit var usedApps: TextView
+    private lateinit var verified_msg:TextView
+    private lateinit var usedApps_msg:TextView
     private var creds = JSONObject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +48,10 @@ class Student : AppCompatActivity() {
         Utils.print("checking permissions")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
             checkPermissions(
-                arrayOf(
-                    Manifest.permission.BLUETOOTH_ADVERTISE
-                )
+                    arrayOf(
+                            Manifest.permission.BLUETOOTH_ADVERTISE,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                    )
             )
         } else {
             discover()
@@ -59,7 +62,7 @@ class Student : AppCompatActivity() {
         var flag = 0
         for (x in permissions) {
             if (ContextCompat.checkSelfPermission(this, x)
-                != PackageManager.PERMISSION_GRANTED
+                    != PackageManager.PERMISSION_GRANTED
             )
                 flag = 1
         }
@@ -72,9 +75,9 @@ class Student : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -97,10 +100,10 @@ class Student : AppCompatActivity() {
     private fun discover() {
         Utils.print("discover()")
         startActivityForResult(
-            Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(
-                BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
-                300
-            ), 1
+                Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(
+                        BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
+                        0
+                ), 1
         )
     }
 
@@ -110,12 +113,12 @@ class Student : AppCompatActivity() {
     }
 
     private fun init() {
+        getCreds()
         setUI()
         setListener()
         setStatus()
         sendStatus()
         getTimings()
-        getCreds()
     }
 
     override fun onStop() {
@@ -190,23 +193,23 @@ class Student : AppCompatActivity() {
                             alert()
                         }
                         val seconds =
-                            (timings[pos].getInt("hr") - time.hour) * 60 * 60 +
-                                    (timings[pos].getInt("min") - time.minute) * 60
+                                (timings[pos].getInt("hr") - time.hour) * 60 * 60 +
+                                        (timings[pos].getInt("min") - time.minute) * 60
                         countDownTimer =
-                            object : CountDownTimer((seconds * 1000).toLong(), 1 * 1000) {
-                                override fun onTick(millisUntilFinished: Long) {
-                                    val text =
-                                        "Reset in ${formatTime((millisUntilFinished / 1000).toInt())}"
-                                    timer_msg.text = text
-                                    Utils.print(text)
-                                }
+                                object : CountDownTimer((seconds * 1000).toLong(), 1 * 1000) {
+                                    override fun onTick(millisUntilFinished: Long) {
+                                        val text =
+                                                "Reset in ${formatTime((millisUntilFinished / 1000).toInt())}"
+                                        timer_msg.text = text
+                                        Utils.print(text)
+                                    }
 
-                                override fun onFinish() {
-                                    reset()
-                                    countDownTimer.cancel()
-                                    Handler().postDelayed({ checkTime() }, 1000)
+                                    override fun onFinish() {
+                                        reset()
+                                        countDownTimer.cancel()
+                                        Handler().postDelayed({ checkTime() }, 1000)
+                                    }
                                 }
-                            }
                         countDownTimer.start()
                     }
                 }
@@ -223,7 +226,7 @@ class Student : AppCompatActivity() {
         var pos = 0
         while (pos < timings.size) {
             if (time.hour > timings[pos].getInt("hr") ||
-                (time.hour == timings[pos].getInt("hr") && time.minute >= timings[pos].getInt("min"))
+                    (time.hour == timings[pos].getInt("hr") && time.minute >= timings[pos].getInt("min"))
             ) {
                 ++pos
             } else {
@@ -243,6 +246,8 @@ class Student : AppCompatActivity() {
         timer_msg = findViewById(R.id.timer_msg)
         usedApps = findViewById(R.id.used_apps)
         verified = findViewById(R.id.verified)
+        verified_msg=findViewById(R.id.s_auth_msg)
+        usedApps_msg=findViewById(R.id.s_auth_mobile)
         findViewById<Button>(R.id.student_attendance).setOnClickListener {
             showAttendance()
         }
@@ -341,15 +346,15 @@ class Student : AppCompatActivity() {
     private fun authenticate() {
         Utils.print("authenticate()")
         val biometricPrompt = BiometricPrompt.Builder(this)
-            .setTitle("Are you Near?")
-            .setSubtitle("")
-            .setDescription("Verify your presence near this device by authenticating using Bio-metric")
-            .setNegativeButton(
-                "Cancel",
-                this.mainExecutor,
-                DialogInterface.OnClickListener { dialog, which ->
-                    Utils.print("Authentication Cancelled")
-                }).build()
+                .setTitle("Are you Near?")
+                .setSubtitle("")
+                .setDescription("Verify your presence near this device by authenticating using Bio-metric")
+                .setNegativeButton(
+                        "Cancel",
+                        this.mainExecutor,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            Utils.print("Authentication Cancelled")
+                        }).build()
         biometricPrompt.authenticate(getCancellationSignal(), mainExecutor, authenticationCallback)
     }
 
@@ -366,11 +371,8 @@ class Student : AppCompatActivity() {
         }
         val json = JSONObject()
         val status = JSONObject()
-//        json.put("username", "arun")
-//        json.put("class", "cse")
         json.put("username", creds.getString("username"))
         json.put("class", creds.getString("class"))
-//        Todo
         if (authenticated)
             status.put("auth", 1)
         else
@@ -387,13 +389,17 @@ class Student : AppCompatActivity() {
     private fun setStatus() {
         if (authenticated) {
             verified.setBackgroundResource(R.drawable.tick_button)
+            verified_msg.text="You are near"
         } else {
             verified.setBackgroundResource(R.drawable.remove_button)
+            verified_msg.text="Are you there ?"
         }
         if (apps) {
             usedApps.setBackgroundResource(R.drawable.mobile)
+            usedApps_msg.text="Used apps"
         } else {
             usedApps.setBackgroundResource(R.drawable.tick_button)
+            usedApps_msg.text="No apps used"
         }
     }
 

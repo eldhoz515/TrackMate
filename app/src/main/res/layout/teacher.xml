@@ -24,9 +24,10 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="8dp"
-                android:background="@drawable/anim"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/logo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +47,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="649dp"
+        android:layout_height="680dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -88,11 +89,11 @@
                         android:id="@+id/s_req_notifier"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:layout_marginStart="64dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/requests"
                         android:backgroundTint="@color/orange"
-                        app:layout_constraintStart_toEndOf="@+id/button_s_list"
+                        app:layout_constraintEnd_toEndOf="@+id/textView141"
+                        app:layout_constraintStart_toStartOf="@+id/textView141"
                         app:layout_constraintTop_toBottomOf="@+id/textView121" />
 
                     <TextView
@@ -111,11 +112,11 @@
                         android:id="@+id/button_s_list"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:layout_marginStart="38dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/list1"
                         android:backgroundTint="@color/orange"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/textView131"
+                        app:layout_constraintStart_toStartOf="@+id/textView131"
                         app:layout_constraintTop_toBottomOf="@+id/textView121" />
 
                     <TextView
