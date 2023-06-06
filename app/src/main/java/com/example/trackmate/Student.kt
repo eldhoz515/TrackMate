@@ -102,7 +102,7 @@ class Student : AppCompatActivity() {
         startActivityForResult(
                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).putExtra(
                         BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
-                        0
+                        300
                 ), 1
         )
     }

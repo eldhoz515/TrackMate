@@ -181,9 +181,6 @@ class Teacher_attendance : DialogFragment() {
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                         Utils.print("discovery started")
-                        Handler().postDelayed({
-                            bluetoothAdapter.cancelDiscovery()
-                        }, 5000)
                     }
                     BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                         Utils.print("discovery stopped")
